@@ -1,64 +1,107 @@
 	p68h11
-	public	keypad
-	
+	public	keypad, transla
+$const.def
+****************************************************************************************************************
+* KEYPAD
+*	Verifica si se pulso alguna tecla y determina las coordenadas de la misma.
+* Parametros recibidos: Ninguno
+* Parametros entregados: Coordenadas del pulsado por memoria
+****************************************************************************************************************
 	rseg	CODE
-char	equ 	*
+keypad	equ 	*
 	psha
 	pshb		;programación defensiva
 	
+	ldaa	#$03
+	staa	cyr
 	
 	ldaa	#$0
 	staa	row
 	ldaa	#FIL0
 	staa 	PORTC
-	
-clop0	ldaa	PORTC
+cloop0	ldaa	PORTC
 	asla
-	bcc	fin
+	bcc	pul
 	dec	cyr
-	bne	clop0
+	bne	cloop0
 	
 	ldaa	#$1
 	staa	row
 	ldaa	#FIL0
 	staa 	PORTC
-	
-clop1	ldaa	PORTC
+cloop1	ldaa	PORTC
 	asla
-	bcc	fin
+	bcc	pul
 	dec	cyr
-	bne	clop1
+	bne	cloop1
 	
 	ldaa	#$2
 	staa	row
 	ldaa	#FIL0
 	staa 	PORTC
-	
-clop2	ldaa	PORTC
+cloop2	ldaa	PORTC
 	asla
-	bcc	fin
+	bcc	pul
 	dec	cyr
-	bne	clop2
+	bne	cloop2
 	
 	ldaa	#$3
 	staa	row
 	ldaa	#FIL0
 	staa 	PORTC
-	
-clop3	ldaa	PORTC
+cloop3	ldaa	PORTC
 	asla
-	bcc	fin
+	bcc	pul
 	dec	cyr
-	bne	clop3
+	bne	cloop3
+	bra	npul
 	
-	
-fin	pulb		;programación defensiva
+pul	jsr	transla
+
+npul	pulb		;programación defensiva
 	pula
 	rts
+	
+****************************************************************************************************************
+****************************************************************************************************************
+
+****************************************************************************************************************
+* TRANSLA
+* Traduce de coordenadas fila y columna al caracter ascii al que le pertenece a la tecla
+*	Parametros recibidos: Coordenadas de fila y columna por memoria. 
+*	Parametros enviados: Valor ascii del caracter pulsado.
+****************************************************************************************************************
+	rseg	CODE
+transla	equ	*
+
+	psha
+	pshb
+	pshx
+	
+	ldaa	row
+	ldab	#4
+	mul
+	ldaa	col
+	aba
+	tab
+	ldx	#I_STR
+	abx
+	ldaa	0,x
+	staa	caract
+	
+	pulx
+	pulb
+	pula
+	rts
+	
 	
 	org	$3000
 col	rmb	1
 row	rmb	1
 cyr	rmb 	1
-	
+
+****************************************************************************************************************
+****************************************************************************************************************
+
+
 	END
