@@ -12,7 +12,7 @@ keypad	equ 	*
 	psha
 	pshb		;programación defensiva
 	
-	ldaa	#$03
+	ldaa	#$04
 	staa	cyr
 	
 	ldaa	#$0
