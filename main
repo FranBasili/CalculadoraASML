@@ -3,17 +3,41 @@
 *	Este programa...
 ****************************************************************************************************************
 	p68h11		;declara el modelo de microprocesador utilizado.
-	extern	initdis,outchar,keypad
+	extern	initdis,outchar,keypad,init,display
 $const.def
 
 	rseg	CODE
 	lds 	#st_ini
-	jsr	initdis
-mlop	ldaa	#$04
-	staa	cyr
-	jsr	keypad
+	jsr	init
+mlop	jsr	keypad
 	
-	jsr 	outchar
+	ldaa	caract
+	cmpa	#$43		; Se apretó reset?
+	bne	nada1
+	jsr init
+	clc	caract
+	jmp	listo
+	
+nada1	ldaa	caract
+	cmpa	#$52		; Se apretó "="?
+	bne	nada2
+	jsr 	calculo
+	clc	caract
+	jmp	listo
+
+nada2 ldaa	caract
+	cmpa	#$30
+	blo	nada3
+	jsr	cargn
+	clc	caract
+	jmp	listo
+
+nada3 ldaa	caract
+	beq	cagamo
+	jsr	cargoop
+	clc	caract
+	
+cagamo	jsr 	display
 	bra	mlop 		
 	
 	
@@ -23,14 +47,6 @@ col	rmb	1
 row	rmb	1
 cyr	rmb 	1
 ****************************************************************************************************************	
-	
-****************************************************************************************************************
-	rseg	STRING
-I_STR	fcc	'0' '1' '2' '3'
-	fcc	'4' '5' '6' '7'
-	fcc	'8' '9' '+' '-'
-	fcc	'C' '*' '/' 'R'	
-****************************************************************************************************************
 
 ****************************************************************************************************************
   rseg	STACK			STACK
