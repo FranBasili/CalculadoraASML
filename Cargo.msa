@@ -1,0 +1,86 @@
+  p68h11
+	public	cargon, cargop
+$const.def	
+****************************************************************************************************************
+* CARGON
+*	
+* Parametros recibidos: Nada
+* Parametros entregados: Nada
+****************************************************************************************************************
+	rseg	CODE
+  cargon	equ *
+    psha
+    pshb
+    pshx
+    pshy
+    
+    ldaa	oper
+	bne		cargop2	; Si ya hay operando: cargo el segundo numero
+	ldaa	nop1
+	cmpa	#4
+	bls	fcargon	; si el operando 1 esta lleno doy por terminado la carga
+	ldab	carac
+    jsr	secuizq
+	inc	nop1
+	ldx	#opbcd1
+	ldaa	1,x
+	staa	0,x
+	ldaa	2,x
+	staa	1,x
+	ldaa	3,x
+	staa	2,x
+	ldaa	carac
+	staa	3,x
+	jmp	fcargon
+    
+	ldaa	nop2
+	cmpa	#4
+	bls	fcargon	; si el operando 2 esta lleno doy por terminado la carga
+	ldab	carac
+    jsr	secuizq
+	inc	nop2
+	ldx	#opbcd2
+	ldaa	1,x
+	staa	0,x
+	ldaa	2,x
+	staa	1,x
+	ldaa	3,x
+	staa	2,x
+	ldaa	carac
+	staa	3,x
+	jmp	fcargon
+    
+fcargon    puly
+    pulx
+    pulb
+    pula
+	rts
+
+****************************************************************************************************************
+
+****************************************************************************************************************
+* CARGOOP
+*	
+* Parametros recibidos: Nada
+* Parametros entregados: Nada
+****************************************************************************************************************
+	rseg	CODE
+  cargoop	equ *
+    psha
+    pshb
+    pshx
+    pshy
+    
+    ldaa	oper
+	bne		fcargop	; Si ya hay operando: termino la subrutina
+	ldaa	carac
+	stab	oper
+	
+    
+fcargop    puly
+    pulx
+    pulb
+    pula
+	rts
+
+****************************************************************************************************************
