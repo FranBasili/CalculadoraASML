@@ -74,7 +74,8 @@ fcargon    puly
     ldaa	oper
 	bne		fcargop	; Si ya hay operando: termino la subrutina
 	ldaa	carac
-	stab	oper
+	staa	oper
+        secuizq
 	
     
 fcargop    puly
