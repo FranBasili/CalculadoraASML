@@ -14,3 +14,26 @@ FIL0	equ 	00001110b ;mascaras para manejo de filas
 FIL1 	equ 	00001101b
 FIL2 	equ 	00001011b
 FIL3 	equ 	00000111b
+
+********************  String  ***************************
+	rseg	STRING
+I_STR	fcc	'0' '1' '2' '3'
+	fcc	'4' '5' '6' '7'
+	fcc	'8' '9' '+' '-'
+	fcc	'C' '*' '/' 'R'	
+	
+*********************** Vars *****************************
+caract	equ	$4500
+op1	equ	$4501
+op2	equ	$4503
+oper	equ	$4505
+mdis0	equ	$4506
+mdis1	equ	$4507
+mdis2	equ	$4508
+mdis3	equ	$4509
+nop1	equ	$451A
+nop2	equ	$451B
+opbcd1	equ	$451C
+opbcd2	equ	$4511
+	equ	$4515
+	
