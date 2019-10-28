@@ -1,0 +1,10 @@
+-ZCODE=2000   					-! Code segment -!
+-ZVARS,CONST=4000         		        -! Data segment -!
+-ZSUBR=2500
+-ZSTACK=3000
+-c68hc11	       				-! Processor -!
+-Fmotorola 					-! Output Format -!
+-x						-! Cross Reference -!
+-B 						-! Forced dump -!
+
+
