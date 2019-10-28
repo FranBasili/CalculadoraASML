@@ -1,0 +1,32 @@
+	p68h11
+	public	char
+	extern	outchar
+
+****************************************************************************************************************
+*						char
+*	Esta subrutina se encarga de mover el string por el display, recibe el inicio de 
+*	string por el IX y posiciona los caracteres en el display.
+****************************************************************************************************************	
+	rseg	CODE
+char	equ 	*
+	psha
+	pshb		;programación defensiva
+	
+	clrb		;limpia b para poder posicionarse en el primer elemento del display
+	ldaa	3,x	;carga el cuarto valor de la posición del string para ponerlo en 
+	jsr	outchar	 el primer elemento del display
+	incb
+	ldaa	2,x	;carga el tercer valor de la posición del string para ponerlo en 
+	jsr	outchar	 el segundo elemento del display
+	incb
+	ldaa	1,x	;carga el segundo valor de la posición del string para ponerlo en 
+	jsr	outchar	 el tercer elemento del display
+	incb
+	ldaa	0,x	;carga el primer valor de la posición del string para ponerlo en
+	jsr	outchar	 el cuarto elemento del display
+	
+	pulb		;programación defensiva
+	pula
+	rts
+	
+	END

@@ -1,0 +1,64 @@
+	p68h11
+	public	keypad
+	
+	rseg	CODE
+char	equ 	*
+	psha
+	pshb		;programación defensiva
+	
+	
+	ldaa	#$0
+	staa	row
+	ldaa	#FIL0
+	staa 	PORTC
+	
+clop0	ldaa	PORTC
+	asla
+	bcc	fin
+	dec	cyr
+	bne	clop0
+	
+	ldaa	#$1
+	staa	row
+	ldaa	#FIL0
+	staa 	PORTC
+	
+clop1	ldaa	PORTC
+	asla
+	bcc	fin
+	dec	cyr
+	bne	clop1
+	
+	ldaa	#$2
+	staa	row
+	ldaa	#FIL0
+	staa 	PORTC
+	
+clop2	ldaa	PORTC
+	asla
+	bcc	fin
+	dec	cyr
+	bne	clop2
+	
+	ldaa	#$3
+	staa	row
+	ldaa	#FIL0
+	staa 	PORTC
+	
+clop3	ldaa	PORTC
+	asla
+	bcc	fin
+	dec	cyr
+	bne	clop3
+	
+	
+fin	pulb		;programación defensiva
+	pula
+	rts
+	
+	org	$3000
+col	rmb	1
+row	rmb	1
+cyr	rmb 	1
+	
+	END

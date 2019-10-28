@@ -1,0 +1,42 @@
+****************************************************************************************************************
+*						Delay
+*	Esta subrutina se escarga de perder timepo de la manera mas eficiente para poder generar un efecto 
+*	visual en el desplazamiento de las letras en el display. El tiempo aproximado se obtuvo probando ya que 
+*	el simulador Wookie ejecua las instrucciones mucho mas rápido que el HC11.
+****************************************************************************************************************
+****************************************************************************************************************	
+*CALCULO DEL DELAY desde pshx hasta rts (1 Ciclo = 0.5 uSeg.)
+*Para que sean 0.5 segundos de delay total se usaria IX=$56CE e Acca=$05 
+*			Ciclos	LOOPS		TOTAL en uSeg
+*	pshx		4	1		2	
+*	psha		3	1		1.5
+*	ldaa		2	1		1
+*loop2	ldx		3	=		=(9*0.5*IX*AccA)	= -->loop1
+*loop1	dex		3	=IX*AccA	=499995
+*	bne	loop1	3	=		=
+*	deca		2	-Acca		-(5*0.5*Acca)		- -->loop2
+*	bne	loop2	3	-		-12.5
+*	pula		4	1		2
+*	pulx		5	1		2.5
+*	rts		5	1		2.5
+*			TIEMPO TOTAL DEL DELAY	500019 uSeg = 0.50019 Seg
+****************************************************************************************************************	
+	p68h11
+	public	delay
+V1	equ	$4	;constante de corección para un mejor efecto visual segun el equipo donde se simula
+V2	equ	$FFFF	;paramero del IX para poder generar un delay de 0.5Seg
+	rseg	CODE
+delay	equ	*
+	pshx
+	psha		;programación defensiva
+	ldaa	#V1	;para alargar o acortar el tiempo modificar este valor
+loop2	ldx	#V2	;delay de forma eficiente, solo pierde tiempo decrementando un valor elevado
+loop1	dex
+	bne	loop1
+	deca		;para poder repetir el proceso de decrementar IX se modifica AccA
+	bne	loop2
+	pula		;programación defensiva
+	pulx
+	rts
+	
+	END
