@@ -27,11 +27,10 @@ noC	ldaa	0,y
 
 noR	ldaa	0,y
 	cmpa	#$30
-	blo	noN
-	ldx	#mdis
-	pshx
-	ldx	#op1bcd
-	jsr	cargon
+	bne	noN
+	ldaa	0,y
+	ldab	#$0
+	jsr	outchar
 	jmp	lcarga
 
 noN 	ldaa	0,y
@@ -46,7 +45,6 @@ lcarga	bra	mlop
 
 ****************************************************************************************************************
 	rseg	VARS
-	
 op1bcd	rmb	4
 op2bcd	rmb	4
 op1	rmb	2
@@ -57,7 +55,7 @@ mdis	rmb	4
 ****************************************************************************************************************	
 
 ****************************************************************************************************************
-  rseg	STACK			STACK
+	rseg	STACK			STACK
 stack	rmb	$50	;el programa hace uso mínimo del stack, pero se asigno un espacio extra.
 st_ini	equ	*-1
 ****************************************************************************************************************
