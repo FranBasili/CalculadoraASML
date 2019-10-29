@@ -51,7 +51,7 @@ borra	clr	0,x
 **************************************************************************
 
 display	equ	*
-	
+
 	psha
 	pshb		;programación defensiva
 	

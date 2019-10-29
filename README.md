@@ -8,3 +8,5 @@ Cosas Faltantes:
 -Subrutina de Div.
 -Conversor ASCII a binario 16 bits
 -Conversor binario a ASCII
+-Conversor binario a ASCII.
+
