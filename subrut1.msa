@@ -28,7 +28,7 @@ outchar equ *
 **************************************
 *Init: Inicializa display y resetea memorias
 **************************************
-init equ *
+init 	equ *
 	jsr	initdis
 	rts
 	
