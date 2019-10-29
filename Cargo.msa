@@ -39,10 +39,10 @@ cargop2	ldaa	5,x
 	jsr	secuizq	; Cargo el nuevo digito al arreglo que muestra el display
 	jmp	fcargon
    
-fcargon    puly
-    pulx
-    pulb
-    pula
+fcargon puly
+	pulx
+	pulb
+	pula
 	rts
 
 ****************************************************************************************************************
