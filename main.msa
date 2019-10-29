@@ -11,8 +11,8 @@ $const.def
 	jsr	init
 mlop	ldy	#I_STR
 	jsr	keypad
-	
 	bcc	lcarga
+	
 	ldaa	0,y
 	cmpa	#$43		; Se apretó reset?
 	bne	noC
