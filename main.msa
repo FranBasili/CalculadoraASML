@@ -1,6 +1,6 @@
 ****************************************************************************************************************
 *						Calculadora						Grupo: 7
-*	Este programa es mas fachero que Pele
+*	Este programa es mas fachero que Pelé
 ****************************************************************************************************************
 	p68h11		;declara el modelo de microprocesador utilizado.
 	extern	initdis,outchar,keypad,init,display,cargon,cargoop,secuizq,calculo
