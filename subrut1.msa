@@ -24,12 +24,22 @@ outchar equ *
 	stab	PORTCL 	;set the position
 	staa 	PORTB	;set the character
 	rts
-
-**************************************
-*Init: Inicializa display y resetea memorias
-**************************************
+	
+**************************************************************************
+*Init: Borra N cantidad de memorias desde la dirección pedida
+*	Parametros recibidos: Dirección de origen por IX, cant memorias AccA
+*	Parametros entregados: Ninguno
+**************************************************************************
 init equ *
-	jsr	initdis
+	pshx
+	psha
+borra	clr	0,x
+	inx
+	deca
+	bne	borra
+	
+	pula
+	pulx
 	rts
 	
 **************************************************************************

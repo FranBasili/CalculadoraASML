@@ -24,7 +24,7 @@ cargon	equ *
 	ldab	0,y	
 	jsr	secuizq	; Cargo el nuevo digito en la memoria donde guardo los operandos en bcd
 	tsx		; Creo un frame pointer
-	ldx	10,x	; Tomo la dirección de la memoria de los display
+	ldx	11,x	; Tomo la dirección de la memoria de los display
 	jsr	secuizq	; Cargo el nuevo digito al arreglo que muestra el display
 	jmp	fcargon
 	
@@ -49,28 +49,35 @@ fcargon    puly
 
 ****************************************************************************************************************
 * CARGOOP
-*	
-* Parametros recibidos: Dir de memoria donde cargar el operando por IX, memorias del display por IY.
+*Carga el operador en la memoria en bcd si no hay operador cargado
+* Parametros recibidos: en orden de numero de memoria creciente: dir memorias displar, operador, 
+*dirección donde guardarlo.
 * Parametros entregados: Nada
 ****************************************************************************************************************
 	rseg	CODE
 cargoop	equ *
 	
-	pshb
+	psha
 	pshx
-	pshy
-
-	ldab	0,x
+	
+	tsx
+	ldx	4,x	; Cargo la direccion donde guardo el operando
+	ldaa	0,x	; Cargo el operando actual
 	bne	fcargop	; Si ya hay operando: termino la subrutina
-	staa	0,x
-	pshy
-	pulx
+	
+	tsx	
+	ldaa	3,x	; Cargo el caracter a agregar
+	ldx	4,x	; Cargo la direccion donde tengo que guardarlo
+	staa	0,x	; Guardo el caracter donde me piden
+	
+	tsx
+	ldab	3,x
+	ldx	6,x
 	jsr	secuizq
-    
-fcargop puly
+	
 	pulx
-	pulb
-	rts
+	pula
+fcargop	rts
 
 ****************************************************************************************************************
 	END

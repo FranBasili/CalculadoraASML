@@ -8,52 +8,71 @@ $const.def
 
 	rseg	CODE
 	lds 	#st_ini
+	jsr	initdis
+	ldx	#op1bcd
+	ldaa	#Nclc	
 	jsr	init
+	ldaa	#$30
+	ldx	#mdis
+	staa	0,x
+	jsr 	display	
 mlop	ldy	#I_STR
 	jsr	keypad
 	
-	bcc	lcarga
+	bcc	nocarga
 	ldaa	0,y
-	cmpa	#$43		; Se apretó reset?
-	bne	noC
+	cmpa	#$43	; Se apretó reset?
+	jsr	outchar
+	ldx	#op1bcd
+	ldaa	#Nclc
 	jsr 	init
+	ldaa	#$30
+	ldx	#mdis
+	staa	0,x
 	jmp	lcarga
 	
 noC	ldaa	0,y
-	cmpa	#$52		; Se apretó "="?
+	cmpa	#$52	; Se apretó "="?
 	bne	noR
-	jsr 	calculo
+	ldaa	0,y
+	ldab	#2
+	jsr	outchar
 	jmp	lcarga
 
 noR	ldaa	0,y
 	cmpa	#$30
-	blo	noN
-	ldx	#mdis
-	pshx
-	ldx	#op1bcd
-	jsr	cargon
+	blo	noN	; Se apretó un numero?
+	ldaa	0,y
+	ldab	#1
+	jsr	outchar
 	jmp	lcarga
 
 noN 	ldaa	0,y
-	beq	lcarga
-	ldx	#op1bcd
-	ldy	#mdis
+	beq	nocarga	; Se apretó un numero?
+	ldx	#mdis
+	pshx
+	ldx	#operbcd
+	pshx
+	ldaa	0,y
+	psha
 	jsr	cargoop
 	
-	ldx	#mdis
+lcarga	ldx	#mdis
 	jsr 	display	
-lcarga	bra	mlop 
+nocarga	bra	mlop 
 
 ****************************************************************************************************************
 	rseg	VARS
 	
 op1bcd	rmb	4
+operbcd	rmb	1
 op2bcd	rmb	4
 op1	rmb	2
 oper	rmb	1
 op2	rmb	2
 
 mdis	rmb	4
+Nclc	equ	*-op1bcd
 ****************************************************************************************************************	
 
 ****************************************************************************************************************
