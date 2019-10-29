@@ -83,7 +83,6 @@ transla	equ	*
 	mul
 	aby
 	
-	
 	sec		;Aviso por carry que se cargo un numero
 	rts
 	
