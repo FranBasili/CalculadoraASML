@@ -3,16 +3,16 @@
 *	Este programa...
 ****************************************************************************************************************
 	p68h11		;declara el modelo de microprocesador utilizado.
-	extern	initdis,outchar,keypad,init,display,cargn,cargoop,secuizq
+	extern	initdis,outchar,keypad,init,display,cargon,cargoop,secuizq,calculo
 $const.def
 
 	rseg	CODE
 	lds 	#st_ini
 	jsr	init
-	ldy	#I_STR
-mlop	jsr	keypad
+mlop	ldy	#I_STR
+	jsr	keypad
 	
-	bcc	lcarga
+bcc	lcarga
 	ldaa	0,y
 	cmpa	#$43		; Se apretó reset?
 	bne	noC
@@ -31,7 +31,7 @@ noR	ldaa	0,y
 	ldx	#mdis
 	pshx
 	ldx	#op1bcd
-	jsr	cargn
+	jsr	cargon
 	jmp	lcarga
 
 noN 	ldaa	0,y
@@ -39,12 +39,11 @@ noN 	ldaa	0,y
 	ldx	#op1bcd
 	ldy	#mdis
 	jsr	cargoop
+	
+	ldx	#mdis
+	jsr 	display	
+lcarga	bra	mlop 
 
-lcarga	ldx	#mdis
-	jsr 	display
-	bra	mlop 		
-	
-	
 ****************************************************************************************************************
 	rseg	VARS
 	
@@ -55,11 +54,6 @@ oper	rmb	1
 op2	rmb	2
 
 mdis	rmb	4
-nop1	equ	$451A
-nop2	equ	$451B
-opbcd1	equ	$451C
-opbcd2	equ	$4511
-	equ	$4515
 ****************************************************************************************************************	
 
 ****************************************************************************************************************
@@ -69,10 +63,7 @@ st_ini	equ	*-1
 ****************************************************************************************************************
 
 ********************  String  ***************************
-	rseg	STRING
-I_STR	fcc	'0' '1' '2' '3'
-	fcc	'4' '5' '6' '7'
-	fcc	'8' '9' '+' '-'
-	fcc	'C' '*' '/' 'R'	
+	rseg	VARS
+I_STR	fcc	'0123456789+-C*/R' 
 	
 	END

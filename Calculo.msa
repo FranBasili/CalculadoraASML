@@ -1,0 +1,14 @@
+	p68h11
+	public	calculo
+
+****************************************************************************************************************
+* CALCULO
+*	Verifica si se pulso alguna tecla y determina las coordenadas de la misma.
+* Parametros recibidos: Ninguno
+* Parametros entregados: Coordenadas del pulsado por memoria
+****************************************************************************************************************
+calculo	equ	*
+rts
+
+
+	END

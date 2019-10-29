@@ -1,55 +1,44 @@
   p68h11
-	public	cargon, cargop
+	public	cargon,cargoop
+	extern	secuizq
 $const.def	
 ****************************************************************************************************************
 * CARGON
 *	
-* Parametros recibidos: Nada
+* Parametros recibidos: Origen de la cadena que contiene a operando 1, operador y operando 2 por IX, Ubicación del 
+*caracter a cargar por IY
 * Parametros entregados: Nada
 ****************************************************************************************************************
 	rseg	CODE
-  cargon	equ *
-    psha
-    pshb
-    pshx
-    pshy
+
+cargon	equ *
+	psha
+	pshb
+	pshx
+	pshy
     
-    ldaa	oper
-	bne		cargop2	; Si ya hay operando: cargo el segundo numero
-	ldaa	nop1
-	cmpa	#4
-	bls	fcargon	; si el operando 1 esta lleno doy por terminado la carga
-	ldab	carac
-    jsr	secuizq
-	inc	nop1
-	ldx	#opbcd1
+	ldaa	10,x	; Cargo el operador actual
+	bne	cargop2	; Si ya hay operando: cargo el segundo numero
 	ldaa	1,x
-	staa	0,x
-	ldaa	2,x
-	staa	1,x
-	ldaa	3,x
-	staa	2,x
-	ldaa	carac
-	staa	3,x
+	bne	fcargon	; si el operando 1 esta lleno doy por terminado la carga
+	ldab	0,y	
+	jsr	secuizq	; Cargo el nuevo digito en la memoria donde guardo los operandos en bcd
+	tsx		; Creo un frame pointer
+	ldx	10,x	; Tomo la dirección de la memoria de los display
+	jsr	secuizq	; Cargo el nuevo digito al arreglo que muestra el display
 	jmp	fcargon
-    
-	ldaa	nop2
-	cmpa	#4
-	bls	fcargon	; si el operando 2 esta lleno doy por terminado la carga
-	ldab	carac
-    jsr	secuizq
-	inc	nop2
-	ldx	#opbcd2
-	ldaa	1,x
-	staa	0,x
-	ldaa	2,x
-	staa	1,x
-	ldaa	3,x
-	staa	2,x
-	ldaa	carac
-	staa	3,x
+	
+cargop2	ldaa	5,x
+	bne	fcargon	; si el operando 1 esta lleno doy por terminado la carga
+	ldab	#5
+	abx		; Apunto al comienzo del numero en bcd
+	ldab	0,y		
+	jsr	secuizq	; Cargo el nuevo digito en la memoria donde guardo los operandos en bcd
+	tsx		; Creo un frame pointer
+	ldx	10,x	; Tomo la dirección de la memoria de los display
+	jsr	secuizq	; Cargo el nuevo digito al arreglo que muestra el display
 	jmp	fcargon
-    
+   
 fcargon    puly
     pulx
     pulb
@@ -61,27 +50,27 @@ fcargon    puly
 ****************************************************************************************************************
 * CARGOOP
 *	
-* Parametros recibidos: Nada
+* Parametros recibidos: Dir de memoria donde cargar el operando por IX, memorias del display por IY.
 * Parametros entregados: Nada
 ****************************************************************************************************************
 	rseg	CODE
-  cargoop	equ *
-    psha
-    pshb
-    pshx
-    pshy
-    
-    ldaa	oper
-	bne		fcargop	; Si ya hay operando: termino la subrutina
-	ldaa	carac
-	staa	oper
-        secuizq
+cargoop	equ *
 	
+	pshb
+	pshx
+	pshy
+
+	ldab	0,x
+	bne	fcargop	; Si ya hay operando: termino la subrutina
+	staa	0,x
+	pshy
+	pulx
+	jsr	secuizq
     
-fcargop    puly
-    pulx
-    pulb
-    pula
+fcargop puly
+	pulx
+	pulb
 	rts
 
 ****************************************************************************************************************
+	END

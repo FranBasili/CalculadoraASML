@@ -1,5 +1,5 @@
 	p68h11
-	public	initdis,outchar,init,secuizq
+	public	initdis,outchar,init,secuizq,display
 $const.def
 	rseg	CODE
 **************************************
@@ -30,25 +30,13 @@ outchar equ *
 **************************************
 init equ *
 	jsr	initdis
-	clc	op1
-	clc	op2
-	clc	oper
-	clc	caract
-	clc	mdis0
-	clc	mdis1	
-	clc	mdis2
-	clc	mdis3
-	clc	nop1
-	clc	nop2
-* BORRAR MEMORIAS BCD	
-	
 	rts
 	
 **************************************************************************
 *DISPLAY
 *  Carga el contenido de las posiciones de memoria mdis0, mdis1, mdis2, mdis3
 * y muesta su contenido en el display en la posicion 0, 1, 2, 3, respectivamente
-*	Parametros recibidos: Caracateres por memoria
+*	Parametros recibidos: Inicio de string con caracteres a mostrar por IX
 *	Parametros entregados: Ninguno
 **************************************************************************
 
@@ -57,19 +45,19 @@ display	equ	*
 	psha	; Hago backup de los registros
 	pshb
 	
-	ldaa	mdis0	; Cargo el caracter que se ubica en la posicion 0
+	ldaa	0,x	; Cargo el caracter que se ubica en la posicion 0
 	ldab	#0
 	jsr	outchar	; Utilizo outchar para cargar en el display
 	
-	ldaa	mdis1	; Cargo el caracter que se ubica en la posicion 1
+	ldaa	1,x	; Cargo el caracter que se ubica en la posicion 1
 	ldab	#1
 	jsr	outchar	; Utilizo outchar para cargar en el display
 	
-	ldaa	mdis2	; Cargo el caracter que se ubica en la posicion 2
+	ldaa	2,x	; Cargo el caracter que se ubica en la posicion 2
 	ldab	#2
 	jsr	outchar	; Utilizo outchar para cargar en el display
 	
-	ldaa	mdis3	; Cargo el caracter que se ubica en la posicion 3
+	ldaa	3,x	; Cargo el caracter que se ubica en la posicion 3
 	ldab	#3
 	jsr	outchar	; Utilizo outchar para cargar en el display
 	
@@ -81,19 +69,19 @@ display	equ	*
 *SECUIZQ:
 * Desplaza hacia la izquierda un lugar el contenido de todas las memorias
 *que despues se cargan al display y agrega el nuevo caracter
-*	Param. Recibe: Caracter a por AccB
+*	Param. Recibe: Caracter a por AccB, inicio del array por IX
 *	Param. Entrega: Ninguno
 ****************************************************************************
 secuizq	equ	*
 	
 	psha		; Guardo AccA en el stack
-	ldaa	mdis2	; Desplazo los contenidos de las memorias que se cargan
-	staa	mdis3	;en el display un lugar a la izquierda
-	ldaa	mdis1
-	staa	mdis2
-	ldaa	mdis0
-	staa	mdis1
-	stab	mdis0	;el caracter derecho
+	ldaa	2,x	; Desplazo los contenidos de las memorias que se cargan
+	staa	3,x	;en el display un lugar a la izquierda
+	ldaa	1,x
+	staa	2,x
+	ldaa	0,x
+	staa	1,x
+	stab	0,x	;el caracter derecho
 	pula		; Recupero Acca
 	rts
 	
