@@ -1,5 +1,5 @@
 	p68h11
-	public	keypad,transla
+	public	keypad
 	extern	outchar
 $const.def
 ****************************************************************************************************************
@@ -14,7 +14,7 @@ keypad	equ 	*
 	pshb		
 	pshx		;programación defensiva
 	
-	ldab	#$04	;indicador de posicion de columna
+	ldab	#$03	;indicador de posicion de columna
 	ldaa	#$0	;indicador de posición de fila 
 	psha		;con frame pointer lo recuperamos en la subrutina transla
 	ldaa	#FIL0
@@ -25,8 +25,8 @@ cloop0	asla
 	decb	
 	bge	cloop0
 	
-	ldab	#$04
-	des
+	ldab	#$03
+	ins
 	ldaa	#$1	;indicador de posición de fila 
 	psha		;con frame pointer lo recuperamos en la subrutina transla
 	ldaa	#FIL1
@@ -37,8 +37,8 @@ cloop1	asla
 	decb
 	bge	cloop1
 	
-	ldab	#$04
-	des
+	ldab	#$03
+	ins
 	ldaa	#$2	;indicador de posición de fila 
 	psha		;con frame pointer lo recuperamos en la subrutina transla
 	ldaa	#FIL2
@@ -49,8 +49,8 @@ cloop2	asla
 	decb	
 	bge	cloop2
 	
-	ldab	#$04
-	des
+	ldab	#$03
+	ins
 	ldaa	#$3	;indicador de posición de fila 
 	psha		;con frame pointer lo recuperamos en la subrutina transla
 	ldaa	#FIL3
@@ -61,34 +61,20 @@ cloop3	asla
 	decb	
 	bge	cloop3
 	clc		; Aviso por carry que no se apreto
-	bra	npul
+	ins
+	bra	nopul
 	
-pul	jsr 	transla
-
-npul	pulx		;programación defensiva
-	pulb		
-	pula
-	rts
-	
-****************************************************************************************************************
-****************************************************************************************************************
-
-****************************************************************************************************************
-* TRANSLA
-* Traduce de coordenadas fila y columna al caracter ascii al que le pertenece a la tecla
-*	Parametros recibidos: Coordenadas de fila por Accb y de columna por stack. IY es el inicio del string 
-*	Parametros enviados: Dirección de memoria del nuevo caracter por IY
-****************************************************************************************************************
-	rseg	CODE
-transla	equ	*
-	
-	pula		;recupero la fila donde estaba leyendo
-	asla		;multiplico por cuatro (tamaño de la columna)
-	asla
+pul	pula		;recupero la fila donde estaba leyendo
+	lsla		;multiplico por cuatro (tamaño de la columna)
+	lsla
 	aba		;nos pocicionamos en el caracter apretado dentro del string
+	tab
 	aby		;se lo sumamos a la posición donde empezaba el string
 	
 	sec		;Aviso por carry que se cargo un numero
+nopul	pulx		;programación defensiva
+	pulb		
+	pula
 	rts
 	
 	
