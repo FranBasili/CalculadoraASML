@@ -1,7 +1,7 @@
 -ZCODE=2000   					-! Code segment -!
 -ZVARS,CONST=4000         		        -! Data segment -!
--ZSUBR=2500
--ZSTACK=3000
+-ZSUBR=2500					
+-ZSTACK=3000					-! Data segment -!
 -c68hc11	       				-! Processor -!
 -Fmotorola 					-! Output Format -!
 -x						-! Cross Reference -!
