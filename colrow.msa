@@ -26,6 +26,7 @@ cloop0	asla
 	bge	cloop0
 	
 	ldab	#$04
+	des
 	ldaa	#$1	;indicador de posición de fila 
 	psha		;con frame pointer lo recuperamos en la subrutina transla
 	ldaa	#FIL1
@@ -37,6 +38,7 @@ cloop1	asla
 	bge	cloop1
 	
 	ldab	#$04
+	des
 	ldaa	#$2	;indicador de posición de fila 
 	psha		;con frame pointer lo recuperamos en la subrutina transla
 	ldaa	#FIL2
@@ -48,6 +50,7 @@ cloop2	asla
 	bge	cloop2
 	
 	ldab	#$04
+	des
 	ldaa	#$3	;indicador de posición de fila 
 	psha		;con frame pointer lo recuperamos en la subrutina transla
 	ldaa	#FIL3
