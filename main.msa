@@ -5,7 +5,6 @@
 	p68h11		;declara el modelo de microprocesador utilizado.
 	extern	initdis,outchar,keypad,init,display,cargon,cargoop,secuizq,calculo
 $const.def
-
 	rseg	CODE
 	lds 	#st_ini
 	jsr	initdis
@@ -69,7 +68,6 @@ op2bcd	rmb	4
 op1	rmb	2
 oper	rmb	1
 op2	rmb	2
-
 mdis	rmb	4
 Nclc	equ	*-op1bcd
 ****************************************************************************************************************	
