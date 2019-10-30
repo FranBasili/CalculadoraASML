@@ -13,7 +13,7 @@ $const.def
 	jsr	init
 	ldaa	#$30
 	ldx	#mdis
-	staa	0,x
+	staa	3,x
 	jsr 	display	
 mlop	ldy	#I_STR
 	jsr	keypad
@@ -27,7 +27,7 @@ mlop	ldy	#I_STR
 	jsr 	init
 	ldaa	#$30
 	ldx	#mdis
-	staa	0,x
+	staa	3,x
 	jmp	lcarga
 	
 noC	ldaa	0,y
