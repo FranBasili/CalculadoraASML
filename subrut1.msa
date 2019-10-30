@@ -93,9 +93,9 @@ secuizq	equ	*
 nulo	staa	1,x
 	ldaa	3,x	
 	cmpa	#$30		;Si el ultimo digito es 0 
-	bne	cargando	;y el numero no tenían cifras anteriores 	
+	bne	load	;y el numero no tenían cifras anteriores 	
 	bsc	clcero		;sobreescribo directamente el nuevo caracter	
-cargando	ldaa	3,x
+load	ldaa	3,x
 	staa	2,x
 clcero	stab	3,x	;el caracter derecho
 	pula		; Recupero Acca
