@@ -75,6 +75,8 @@ display	equ	*
 ***************************************************************************
 *SECUIZQ:
 * Desplaza hacia la izquierda un lugar el contenido de todas las memorias
+* Si solo se encuentra el 0 en el display y se agrega un nuevo digito, elimina
+*el 0
 *que despues se cargan al display y agrega el nuevo caracter
 *	Param. Recibe: Caracter a por AccB, inicio del array por IX
 *	Param. Entrega: Ninguno
@@ -82,13 +84,20 @@ display	equ	*
 secuizq	equ	*
 	
 	psha		; Guardo AccA en el stack
-	ldaa	2,x	; Desplazo los contenidos de las memorias que se cargan
-	staa	3,x	;en el display un lugar a la izquierda
-	ldaa	1,x
+	clc		; Limpio carry para ver si esta solo el 0
+	ldaa	1,x	; Desplazo los contenidos de las memorias que se cargan
+	staa	0,x	;en el display un lugar a la izquierda
+	ldaa	2,x
+	beq	nulo
+	sec		; Si el segundo digito no tiene nada, acciono el carry
+nulo	staa	1,x
+	ldaa	3,x	
+	cmpa	#$30		;Si el ultimo digito es 0 
+	bne	cargando	;y el numero no tenían cifras anteriores 	
+	bsc	clcero		;sobreescribo directamente el nuevo caracter	
+cargando	ldaa	3,x
 	staa	2,x
-	ldaa	0,x
-	staa	1,x
-	stab	0,x	;el caracter derecho
+clcero	stab	3,x	;el caracter derecho
 	pula		; Recupero Acca
 	rts
 	
