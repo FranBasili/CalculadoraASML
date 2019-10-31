@@ -8,7 +8,7 @@ $const.def
 	rseg	CODE
 	lds 	#st_ini
 	jsr	initdis
-	ldx	#op1bcd
+	ldx	#negop1
 	ldaa	#Nclc	
 	jsr	init
 	ldaa	#$30
@@ -23,7 +23,7 @@ mlop	ldy	#I_STR
 	ldaa	0,y
 	cmpa	#$43	; Se apretó reset?
 	bne	noC
-	ldx	#op1bcd
+	ldx	#negop1
 	ldaa	#Nclc	
 	jsr	init
 	ldaa	#$30
