@@ -1,0 +1,60 @@
+	p68h11
+	public	btasci
+****************************************************************************************************************
+* 		Binary to ASCII
+* Transforma un numero en bcd a binario
+* Parametros recibidos:  Inicio de número Binary por IX e Inicio de mdis por IY
+* Parametros entregados: 
+****************************************************************************************************************
+	rseg	CODE
+btasci	equ	*
+ 	psha
+	pshb
+	pshx
+	pshy		;programación defensiva
+	ldab	#30	;corrección de número decimal a ASCII
+	ldaa	0,x	
+	lsla
+	bcc	posit
+	ldx	#$2D	;cargo el sibolo negativo -
+	pshx
+	ldd	0,x
+	coma
+	comb
+	addd	#$1
+	bra 	negat
+
+posit	ldd	0,x
+	ldx	#1000
+	idiv
+	abx
+	pulx
+
+negat	ldx	#100
+	idiv 
+	abx
+	pulx
+	
+	ldx	#10
+	idiv
+	abx
+	pulx
+
+	xgdx	
+	pulx
+	
+cargo	ldx	#4
+	pulb
+	pula
+	stab	0,y
+	iny
+	dex
+	bne	cargo
+	
+	puly	;programación defensiva
+	pulx
+	pula	
+	pulb
+	rts
+
+	END
