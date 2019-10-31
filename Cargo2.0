@@ -17,20 +17,24 @@ cargon	equ *
 	pshx
 	pshy
     
-	ldaa	2,x	; Cargo el operador actual
+	ldx	2,x	; Cargo el operador actual
 	bne	cargop2	; Si ya hay operando: cargo el segundo numero
 	
-  ldaa  digop1
-  cmpa  #3    
-  bhs fcargon   ; Si ya tenía 3 digitos no sigo cargando
-  ldab  0,y     ; Cargo en AccB el valor a sumar
-  ldy 0,x       ; Cargo en IY el valor que ya tenía
-  ldaa  #10     ; Cargo para multiplicar por 10
-  mul
-  tab
-  aby
-  sty 0,x
-	inc digop1
+	ldaa  digop1
+	cmpa  #3    
+	bhs	fcargon   ; Si ya tenía 3 digitos no sigo cargando
+	ldaa	0,x	; Cargo el byte de negatividad
+	bne	neg1	; Si el numero es negativo, salto
+	ldab	0,y     ; Cargo en AccB el valor a sumar
+	ldy	0,x       ; Cargo en IY el valor que ya tenía
+	ldaa	#10     ; Cargo para multiplicar por 10
+	mul
+	tab
+	aby
+	sty	0,x
+	inc 	digop1
+	
+neg1	
 		
 cargop2	ldaa	6,x
 	bne	fcargon	; si el operando 1 esta lleno doy por terminado la carga
@@ -85,4 +89,7 @@ cargoop	equ *
 fcargop	rts
 
 ****************************************************************************************************************
+	rseg	VARS
+digop1	rmb	1
+digop2	rmb	1
 	END
