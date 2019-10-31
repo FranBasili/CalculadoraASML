@@ -29,7 +29,7 @@ cargon	equ *
 	jsr	secuizq	; Cargo el nuevo digito al arreglo que muestra el display
 	jmp	fcargon
 	
-cargop2	ldaa	5,x
+cargop2	ldaa	6,x
 	bne	fcargon	; si el operando 1 esta lleno doy por terminado la carga
 	ldab	#5
 	abx		; Apunto al comienzo del numero en bcd
