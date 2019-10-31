@@ -53,9 +53,29 @@ noR	ldaa	0,y
 	clc
 	jmp	lcarga
 
-noN 	ldaa	0,y
-	beq	nocarga	; Se apretó un numero?
-	clc
+noN 	noC	ldaa	0,y
+	cmpa	#$2D	; Se apretó "-"?
+	ldx	op1
+	bne	hayop1
+	ldx	#mdis
+	ldaa	#$2D
+	ldab	#0
+	jsr	outchar
+	inc	neg1
+	jmp	lcarga
+	
+hayop1	jsr	cargoop
+	ldx	#mdis
+	pshx
+	ldx	#operbcd
+	pshx
+	ldaa	0,y
+	psha
+	jsr	cargoop
+	jmp	lcarga
+
+noM	ldaa	0,y
+	beq	nocarga	; Se apretó un operando?
 	ldx	#mdis
 	pshx
 	ldx	#operbcd
