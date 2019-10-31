@@ -66,6 +66,9 @@ neg2	inc	negop2
 noM	ldaa	0,y
 	beq	nocarga	; Se apretó un operando?
 	ldx	#oper
+	ldaa	0,x
+	bne	lcarga
+	ldaa	0,y
 	staa	0,x
 	clc
 	
