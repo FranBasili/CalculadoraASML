@@ -37,6 +37,7 @@ cargop2	ldaa	6,x
 	jsr	secuizq	; Cargo el nuevo digito en la memoria donde guardo los operandos en bcd
 	ldab	#8
 	abx
+        ldab    0,y
 	jsr	secuizq	; Cargo el nuevo digito al arreglo que muestra el display
 	jmp	fcargon
    
