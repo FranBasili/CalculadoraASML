@@ -8,7 +8,7 @@
 * Parametros entregados: Coordenadas del pulsado por memoria
 ****************************************************************************************************************
 calculo	equ	*
-rts
+	rts
 
 
 	END

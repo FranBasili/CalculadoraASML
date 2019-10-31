@@ -50,9 +50,9 @@ fcargon puly
 ****************************************************************************************************************
 * CARGOOP
 *Carga el operador en la memoria en bcd si no hay operador cargado
-* Parametros recibidos: en orden de numero de memoria creciente: dir memorias displar, operador, 
+* Parametros recibidos: en orden de numero de memoria creciente: dir memorias mostrar, operador, 
 *dirección donde guardarlo.
-* Parametros entregados: Nada
+* Parametros entregados: Ninguno
 ****************************************************************************************************************
 	rseg	CODE
 cargoop	equ *
@@ -61,18 +61,18 @@ cargoop	equ *
 	pshx
 	
 	tsx
-	ldx	4,x	; Cargo la direccion donde guardo el operando
+	ldx	6,x	; Cargo la direccion donde guardo el operando
 	ldaa	0,x	; Cargo el operando actual
 	bne	fcargop	; Si ya hay operando: termino la subrutina
 	
 	tsx	
-	ldaa	3,x	; Cargo el caracter a agregar
-	ldx	4,x	; Cargo la direccion donde tengo que guardarlo
+	ldaa	5,x	; Cargo el caracter a agregar
+	ldx	6,x	; Cargo la direccion donde tengo que guardarlo
 	staa	0,x	; Guardo el caracter donde me piden
 	
 	tsx
-	ldab	3,x
-	ldx	6,x
+	ldab	5,x
+	ldx	7,x
 	jsr	secuizq
 	
 	pulx

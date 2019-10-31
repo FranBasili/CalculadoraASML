@@ -3,7 +3,7 @@
 *	Este programa es mas fachero que Pele
 ****************************************************************************************************************
 	p68h11		;declara el modelo de microprocesador utilizado.
-	extern	initdis,outchar,keypad,init,display,cargoop
+	extern	initdis,outchar,keypad,init,display,cargoop,calculo
 $const.def
 	rseg	CODE
 	lds 	#st_ini
@@ -19,15 +19,17 @@ mlop	ldy	#I_STR
 	jsr	keypad
 	
 	bcc	nocarga
+	
 	ldaa	0,y
 	cmpa	#$43	; Se apretó reset?
-	jsr	outchar
+	bne	noC
 	ldx	#op1bcd
-	ldaa	#Nclc
-	jsr 	init
+	ldaa	#Nclc	
+	jsr	init
 	ldaa	#$30
 	ldx	#mdis
 	staa	3,x
+	clc
 	jmp	lcarga
 	
 noC	ldaa	0,y
@@ -36,6 +38,8 @@ noC	ldaa	0,y
 	ldaa	0,y
 	ldab	#2
 	jsr	outchar
+	jsr	calculo
+	clc
 	jmp	lcarga
 
 noR	ldaa	0,y
@@ -44,10 +48,12 @@ noR	ldaa	0,y
 	ldaa	0,y
 	ldab	#1
 	jsr	outchar
+	clc
 	jmp	lcarga
 
 noN 	ldaa	0,y
 	beq	nocarga	; Se apretó un numero?
+	clc
 	ldx	#mdis
 	pshx
 	ldx	#operbcd
@@ -55,6 +61,7 @@ noN 	ldaa	0,y
 	ldaa	0,y
 	psha
 	jsr	cargoop
+	clc
 	
 lcarga	ldx	#mdis
 	jsr 	display	
@@ -79,7 +86,7 @@ st_ini	equ	*-1
 ****************************************************************************************************************
 
 ********************  String  ***************************
-	rseg	STRING
+	rseg	VARS
 I_STR	fcc	'0123456789+-C*/R' 
 	
 	END
