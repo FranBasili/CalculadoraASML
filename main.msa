@@ -39,8 +39,23 @@ noC	ldaa	0,y
 	ldab	#2
 	jsr	outchar
 	jsr	calculo
-	clc
-	jmp	lcarga
+	
+	*******
+	*Hacer la parte del error
+	sec
+	*******	
+	
+	
+	bcc	enlace	; Si no hay carry, actualizo el display normal
+	ldx	#mdis	; Sino borro las memorias del display
+	clr	1,x
+	clr	2,x
+	clr	3,x
+	ldaa	#$45
+	staa	0,x
+	clc		
+	
+enlace	jmp	lcarga
 
 noR	ldaa	0,y
 	cmpa	#$30
