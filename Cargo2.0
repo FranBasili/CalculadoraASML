@@ -1,0 +1,88 @@
+p68h11
+	public	cargon,cargoop
+	extern	secuizq
+$const.def	
+****************************************************************************************************************
+* CARGON
+*	
+* Parametros recibidos: Origen de la cadena que contiene a operando 1, operador y operando 2 por IX, Ubicación del 
+*caracter a cargar por IY
+* Parametros entregados: Nada
+****************************************************************************************************************
+	rseg	CODE
+
+cargon	equ *
+	psha
+	pshb
+	pshx
+	pshy
+    
+	ldaa	2,x	; Cargo el operador actual
+	bne	cargop2	; Si ya hay operando: cargo el segundo numero
+	
+  ldaa  digop1
+  cmpa  #3    
+  bhs fcargon   ; Si ya tenía 3 digitos no sigo cargando
+  ldab  0,y     ; Cargo en AccB el valor a sumar
+  ldy 0,x       ; Cargo en IY el valor que ya tenía
+  ldaa  #10     ; Cargo para multiplicar por 10
+  mul
+  tab
+  aby
+  sty 0,x
+	inc digop1
+		
+cargop2	ldaa	6,x
+	bne	fcargon	; si el operando 1 esta lleno doy por terminado la carga
+	ldab	#5
+	abx		; Apunto al comienzo del numero en bcd
+	ldab	0,y		
+	jsr	secuizq	; Cargo el nuevo digito en la memoria donde guardo los operandos en bcd
+	ldab	#8
+	abx
+        ldab    0,y
+	jsr	secuizq	; Cargo el nuevo digito al arreglo que muestra el display
+	jmp	fcargon
+   
+fcargon puly
+	pulx
+	pulb
+	pula
+	rts
+
+****************************************************************************************************************
+
+****************************************************************************************************************
+* CARGOOP
+*Carga el operador en la memoria en bcd si no hay operador cargado
+* Parametros recibidos: en orden de numero de memoria creciente: operador, dirección donde guardarlo,
+*dir memorias mostrar. 
+* Parametros entregados: Ninguno
+****************************************************************************************************************
+	rseg	CODE
+cargoop	equ *
+	
+	psha
+	pshx
+	
+	tsx
+	ldx	6,x	; Cargo la direccion donde guardo el operando
+	ldaa	0,x	; Cargo el operando actual
+	bne	fcargop	; Si ya hay operando: termino la subrutina
+	
+	tsx	
+	ldaa	5,x	; Cargo el caracter a agregar
+	ldx	6,x	; Cargo la direccion donde tengo que guardarlo
+	staa	0,x	; Guardo el caracter donde me piden
+	
+	tsx
+	ldab	5,x
+	ldx	8,x
+	jsr	secuizq
+	
+	pulx
+	pula
+fcargop	rts
+
+****************************************************************************************************************
+	END
