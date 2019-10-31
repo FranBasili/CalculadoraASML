@@ -89,6 +89,16 @@ st_ini	equ	*-1
 
 ********************  String  ***************************
 	rseg	CONST
-I_STR	fcc	'0123456789+-C*/R' 
+I_STR	fbc	'0'
+	fbc	'1'
+	fbc	'2'
+	fbc	'3'
+	fbc	'4'
+	fbc	'5'
+	fbc	'6'
+	fbc	'7'
+	fbc	'8'
+	fbc	'9'
+	fcc	'+-C*/R'
 	
 	END
