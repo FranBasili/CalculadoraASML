@@ -3,7 +3,7 @@
 *	Este programa es mas fachero que Pele
 ****************************************************************************************************************
 	p68h11		;declara el modelo de microprocesador utilizado.
-	extern	initdis,outchar,keypad,init,display,cargoop,calculo
+	extern	initdis,outchar,keypad,init,display,cargoop,cargon,calculo,delay
 $const.def
 	rseg	CODE
 	lds 	#st_ini
@@ -46,8 +46,10 @@ noR	ldaa	0,y
 	cmpa	#$30
 	blo	noN	; Se apretó un numero?
 	ldaa	0,y
-	ldab	#1
+	ldab	#3
 	jsr	outchar
+	ldx	#op1bcd
+	jsr	cargon
 	clc
 	jmp	lcarga
 
@@ -65,6 +67,7 @@ noN 	ldaa	0,y
 	
 lcarga	ldx	#mdis
 	jsr 	display	
+	jsr	delay
 nocarga	bra	mlop 
 
 ****************************************************************************************************************
@@ -73,20 +76,19 @@ op1bcd	rmb	4
 operbcd	rmb	1
 op2bcd	rmb	4
 op1	rmb	2
-oper	rmb	1
 op2	rmb	2
 mdis	rmb	4
 Nclc	equ	*-op1bcd
 ****************************************************************************************************************	
 
 ****************************************************************************************************************
-  rseg	STACK			STACK
+	rseg	STACK
 stack	rmb	$50	;el programa hace uso mínimo del stack, pero se asigno un espacio extra.
 st_ini	equ	*-1
 ****************************************************************************************************************
 
 ********************  String  ***************************
-	rseg	VARS
+	rseg	CONST
 I_STR	fcc	'0123456789+-C*/R' 
 	
 	END

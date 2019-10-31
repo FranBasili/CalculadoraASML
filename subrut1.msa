@@ -84,22 +84,36 @@ display	equ	*
 secuizq	equ	*
 	
 	psha		; Guardo AccA en el stack
-	clc		; Limpio carry para ver si esta solo el 0
-	ldaa	1,x	; Desplazo los contenidos de las memorias que se cargan
+	
+	cmpb	#$30
+	bhs	secnum	; Si el caracter es un numero, hago una secuencia
+	jmp	secope	; Si el caracter es un operador, hago otra secuencia
+
+secnum	ldaa	1,x	; Desplazo los contenidos de las memorias que se cargan
 	staa	0,x	;en el display un lugar a la izquierda
 	ldaa	2,x
-	beq	nulo
-	sec		; Si el segundo digito no tiene nada, acciono el carry
-nulo	staa	1,x
+	staa	1,x
 	ldaa	3,x	
 	cmpa	#$30	;Si el ultimo digito es 0 
-	bne	load	;y el numero no tenían cifras anteriores 	
-	bcs	clcero	;sobreescribo directamente el nuevo caracter	
+	bne	load	;y el numero no tenían cifras anteriores 
+	ldaa	2,x	;sobreescribo directamente el nuevo caracter
+	beq	clcero	;sin desplazar el 0
 load	ldaa	3,x
 	staa	2,x
 clcero	stab	3,x	;el caracter derecho
 	pula		;Recupero Acca
 	rts
+	
+secope	ldaa	1,x	; Desplazo los contenidos de las memorias que se cargan
+	staa	0,x	;en el display un lugar a la izquierda
+	ldaa	2,x
+	staa	1,x
+	ldaa	3,x	
+	staa	2,x
+	stab	3,x
+	pula		;Recupero Acca
+	rts
+	
 	
 ****************************************************************************
 ****************************************************************************

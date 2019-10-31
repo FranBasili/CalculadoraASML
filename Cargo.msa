@@ -17,14 +17,15 @@ cargon	equ *
 	pshx
 	pshy
     
-	ldaa	10,x	; Cargo el operador actual
+	ldaa	4,x	; Cargo el operador actual
 	bne	cargop2	; Si ya hay operando: cargo el segundo numero
 	ldaa	1,x
 	bne	fcargon	; si el operando 1 esta lleno doy por terminado la carga
 	ldab	0,y	
 	jsr	secuizq	; Cargo el nuevo digito en la memoria donde guardo los operandos en bcd
-	tsx		; Creo un frame pointer
-	ldx	11,x	; Tomo la dirección de la memoria de los display
+	
+	ldab	#13	; Cargo en IX la dir de memoria de los display
+	abx
 	jsr	secuizq	; Cargo el nuevo digito al arreglo que muestra el display
 	jmp	fcargon
 	
@@ -34,8 +35,8 @@ cargop2	ldaa	5,x
 	abx		; Apunto al comienzo del numero en bcd
 	ldab	0,y		
 	jsr	secuizq	; Cargo el nuevo digito en la memoria donde guardo los operandos en bcd
-	tsx		; Creo un frame pointer
-	ldx	10,x	; Tomo la dirección de la memoria de los display
+	ldab	#8
+	abx
 	jsr	secuizq	; Cargo el nuevo digito al arreglo que muestra el display
 	jmp	fcargon
    
@@ -50,8 +51,8 @@ fcargon puly
 ****************************************************************************************************************
 * CARGOOP
 *Carga el operador en la memoria en bcd si no hay operador cargado
-* Parametros recibidos: en orden de numero de memoria creciente: dir memorias mostrar, operador, 
-*dirección donde guardarlo.
+* Parametros recibidos: en orden de numero de memoria creciente: operador, dirección donde guardarlo,
+*dir memorias mostrar. 
 * Parametros entregados: Ninguno
 ****************************************************************************************************************
 	rseg	CODE
