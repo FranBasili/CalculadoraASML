@@ -45,7 +45,7 @@ noC	ldaa	0,y
 noR	ldaa	0,y
 	cmpa	#$30
 	blo	noN	; Se apretó un numero?
-	ldx	#op1bcd
+	ldx	#negop1
 	jsr	cargon
 	clc
 	jmp	lcarga
@@ -66,7 +66,8 @@ neg2	bne
 	
 noM	ldaa	0,y
 	beq	nocarga	; Se apretó un operando?
-	jsr	cargoop
+	ldx	#oper
+	staa	0,x
 	clc
 	
 lcarga	ldx	#mdis
