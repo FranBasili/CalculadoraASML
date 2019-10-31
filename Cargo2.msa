@@ -5,7 +5,7 @@ $const.def
 ****************************************************************************************************************
 * CARGON
 *	
-* Parametros recibidos: Origen de la cadena que contiene a operando 1, operador y operando 2 por IX, Ubicación del 
+* Parametros recibidos: Origen de la cadena que contiene los operandos por IX, Ubicación del 
 *caracter a cargar por IY
 * Parametros entregados: Nada
 ****************************************************************************************************************
@@ -104,7 +104,8 @@ fcargon puly
 
 ****************************************************************************************************************
 * CARGOOP
-*Carga el operador en la memoria en bcd si no hay operador cargado
+*
+* Carga el operador en la memoria en bcd si no hay operador cargado.
 * Parametros recibidos: en orden de numero de memoria creciente: operador, dirección donde guardarlo,
 *dir memorias mostrar. 
 * Parametros entregados: Ninguno
