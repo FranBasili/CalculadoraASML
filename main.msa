@@ -72,10 +72,8 @@ nocarga	bra	mlop
 
 ****************************************************************************************************************
 	rseg	VARS
-op1bcd	rmb	4
-operbcd	rmb	1
-op2bcd	rmb	4
 op1	rmb	2
+oper	rmb	1
 op2	rmb	2
 mdis	rmb	4
 Nclc	equ	*-op1bcd
