@@ -45,43 +45,27 @@ noC	ldaa	0,y
 noR	ldaa	0,y
 	cmpa	#$30
 	blo	noN	; Se apretó un numero?
-	ldaa	0,y
-	ldab	#3
-	jsr	outchar
 	ldx	#op1bcd
 	jsr	cargon
 	clc
 	jmp	lcarga
 
-noN 	noC	ldaa	0,y
+noN 	ldaa	0,y
 	cmpa	#$2D	; Se apretó "-"?
+	bne	noM
+	ldaa	oper	
+	bne	neg2	; Si hay operando, niego el segundo numero
 	ldx	op1
-	bne	hayop1
-	ldx	#mdis
-	ldaa	#$2D
-	ldab	#0
-	jsr	outchar
-	inc	neg1
+	bne	noM	; Si ya hay operando 1 voy a cargar el "-" como operacion
+	inc	negop1
 	jmp	lcarga
 	
-hayop1	jsr	cargoop
-	ldx	#mdis
-	pshx
-	ldx	#operbcd
-	pshx
-	ldaa	0,y
-	psha
-	jsr	cargoop
+neg2	bne	
+	inc	negop2
 	jmp	lcarga
-
+	
 noM	ldaa	0,y
 	beq	nocarga	; Se apretó un operando?
-	ldx	#mdis
-	pshx
-	ldx	#operbcd
-	pshx
-	ldaa	0,y
-	psha
 	jsr	cargoop
 	clc
 	
@@ -92,8 +76,10 @@ nocarga	bra	mlop
 
 ****************************************************************************************************************
 	rseg	VARS
+negop1	rmb	1
 op1	rmb	2
 oper	rmb	1
+negop2	rmb	1
 op2	rmb	2
 mdis	rmb	4
 Nclc	equ	*-op1bcd
