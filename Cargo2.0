@@ -20,19 +20,20 @@ cargon	equ *
 	ldx	2,x	; Cargo el operador actual
 	bne	cargop2	; Si ya hay operando: cargo el segundo numero
 	
-	ldaa  digop1
-	cmpa  #3    
+	ldaa 	digop1
+	cmpa 	#3    
 	bhs	fcargon   ; Si ya tenía 3 digitos no sigo cargando
 	ldaa	0,x	; Cargo el byte de negatividad
 	bne	neg1	; Si el numero es negativo, salto
 	ldab	0,y     ; Cargo en AccB el valor a sumar
-	ldy	0,x       ; Cargo en IY el valor que ya tenía
+	ldy	0,x     ; Cargo en IY el valor que ya tenía
 	ldaa	#10     ; Cargo para multiplicar por 10
 	mul
 	tab
 	aby
 	sty	0,x
 	inc 	digop1
+	jmp	fcargon
 	
 neg1	clr	cont1
 	ldd	0,x       ; Cargo en IY el valor que ya tenía
@@ -53,6 +54,7 @@ multi	addd	mem1
 	pulx		; Recupero IX
 	std	1,x	; Guardo el numero en op1
 	inc 	digop1
+	jmp	fcargon
 	
 		
 cargop2	ldaa  digop2
@@ -68,6 +70,7 @@ cargop2	ldaa  digop2
 	aby
 	sty	5,x
 	inc 	digop2
+	jmp	fcargon
 	
 neg2	clr	cont2
 	ldd	5,x       ; Cargo en IY el valor que ya tenía
@@ -86,23 +89,10 @@ multi2	addd	mem2
 	abx		; Sumo el nuevo caracter
 	xgdx		; Paso el nuevo numero a Accd
 	pulx		; Recupero IX
-	std	5,x	; Guardo el numero en op1
-	inc 	digop1
-
-
-
-
-ldaa	6,x
-	bne	fcargon	; si el operando 1 esta lleno doy por terminado la carga
-	ldab	#5
-	abx		; Apunto al comienzo del numero en bcd
-	ldab	0,y		
-	jsr	secuizq	; Cargo el nuevo digito en la memoria donde guardo los operandos en bcd
-	ldab	#8
-	abx
-        ldab    0,y
-	jsr	secuizq	; Cargo el nuevo digito al arreglo que muestra el display
+	std	5,x	; Guardo el numero en op2
+	inc 	digop2
 	jmp	fcargon
+
    
 fcargon puly
 	pulx
