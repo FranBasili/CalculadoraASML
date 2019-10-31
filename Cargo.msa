@@ -72,7 +72,7 @@ cargoop	equ *
 	
 	tsx
 	ldab	5,x
-	ldx	7,x
+	ldx	8,x
 	jsr	secuizq
 	
 	pulx
