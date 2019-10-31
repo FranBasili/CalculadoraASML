@@ -1,6 +1,7 @@
 p68h11
 	public	cargon,cargoop
-	extern	secuizq
+	extern	btasci	
+	public	cargon, cargoop
 $const.def	
 ****************************************************************************************************************
 * CARGON
@@ -33,9 +34,20 @@ cargon	equ *
 	aby
 	sty	0,x
 	inc 	digop1
+	
+	tsx
+	ldy	2,x	; Recupero el origen del arreglo de numeros
+	pshy		
+	pulx		; Lo cargo tambien en IX
+	ldab	#10
+	aby		; Apunto IY a mdis
+	ldab	#1
+	abx		; Apunto IX al operando que quiero mostrar
+	jsr	btasci	; Voy a la subrutina que convierte y muestra el numero
 	jmp	fcargon
 	
-neg1	clr	cont1
+neg1	ldaa	#10
+	staa	cont1
 	ldd	0,x       ; Cargo en IY el valor que ya tenía
 	coma
 	comb
@@ -54,9 +66,18 @@ multi	addd	mem1
 	pulx		; Recupero IX
 	std	1,x	; Guardo el numero en op1
 	inc 	digop1
+	
+	tsx
+	ldy	2,x	; Recupero el origen del arreglo de numeros
+	pshy		
+	pulx		; Lo cargo tambien en IX
+	ldab	#10
+	aby		; Apunto IY a mdis
+	ldab	#1
+	abx		; Apunto IX al operando que quiero mostrar
+	jsr	btasci	; Voy a la subrutina que convierte y muestra el numero
 	jmp	fcargon
 	
-		
 cargop2	ldaa  digop2
 	cmpa  #3    
 	bhs	fcargon   ; Si ya tenía 3 digitos no sigo cargando
@@ -70,9 +91,21 @@ cargop2	ldaa  digop2
 	aby
 	sty	5,x
 	inc 	digop2
+	
+	tsx
+	ldy	2,x	; Recupero el origen del arreglo de numeros
+	pshy		
+	pulx		; Lo cargo tambien en IX
+	ldab	#10
+	aby		; Apunto IY a mdis
+	ldab	#5
+	abx		; Apunto IX al operando que quiero mostrar
+	jsr	btasci	; Voy a la subrutina que convierte y muestra el numero
+	
 	jmp	fcargon
 	
-neg2	clr	cont2
+neg2	ldaa	#10
+	staa	cont2
 	ldd	5,x       ; Cargo en IY el valor que ya tenía
 	coma
 	comb
@@ -91,9 +124,18 @@ multi2	addd	mem2
 	pulx		; Recupero IX
 	std	5,x	; Guardo el numero en op2
 	inc 	digop2
+	
+	tsx
+	ldy	2,x	; Recupero el origen del arreglo de numeros
+	pshy		
+	pulx		; Lo cargo tambien en IX
+	ldab	#10
+	aby		; Apunto IY a mdis
+	ldab	#5
+	abx		; Apunto IX al operando que quiero mostrar
+	jsr	btasci	; Voy a la subrutina que convierte y muestra el numero
 	jmp	fcargon
-
-   
+	
 fcargon puly
 	pulx
 	pulb
