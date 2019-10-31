@@ -100,7 +100,10 @@ secnum	ldaa	1,x	; Desplazo los contenidos de las memorias que se cargan
 	beq	clcero	;sin desplazar el 0
 load	ldaa	3,x
 	staa	2,x
-clcero	stab	3,x	;el caracter derecho
+clcero	ldaa	#$30
+	aba
+	tab
+	stab	3,x	;el caracter derecho
 	pula		;Recupero Acca
 	rts
 	
