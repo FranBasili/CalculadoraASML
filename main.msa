@@ -1,6 +1,6 @@
 ****************************************************************************************************************
 *						Calculadora						Grupo: 7
-*	Este programa es mas fachero que Pele
+*	Este programa ...
 ****************************************************************************************************************
 	p68h11		;declara el modelo de microprocesador utilizado.
 	extern	initdis,outchar,keypad,init,display,cargoop,cargon,calculo,delay
@@ -51,17 +51,16 @@ noR	ldaa	0,y
 	jmp	lcarga
 
 noN 	ldaa	0,y
-	cmpa	#$2D	; Se apretó "-"?
-	bne	noM
+	cmpa	#$2D	
+	bne	noM	; Se apretó "-"?
 	ldaa	oper	
 	bne	neg2	; Si hay operando, niego el segundo numero
 	ldx	op1
 	bne	noM	; Si ya hay operando 1 voy a cargar el "-" como operacion
-	inc	negop1
+	inc	negop2	
 	jmp	lcarga
 	
-neg2	bne	
-	inc	negop2
+neg2	inc	negop2
 	jmp	lcarga
 	
 noM	ldaa	0,y
