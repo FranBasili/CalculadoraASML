@@ -31,7 +31,7 @@ posit	ldd	0,x
 	pshx
 cargo	ldx	#10
 	idiv
-	addb	#30	;corrección de número decimal a ASCII		
+	addb	#$30	;corrección de número decimal a ASCII		
 	stab	3,y
 	dey
 	xgdx
