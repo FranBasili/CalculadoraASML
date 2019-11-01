@@ -26,7 +26,7 @@ calculo	equ	*
 ****************************************************************************************************************	
 resta	equ	*
 	ldd	0,x
-	add	4,x	;4,x es el segundo operando en variables
+	addd	4,x	;4,x es el segundo operando en variables
 	std	0,y
 	bra	fin
 

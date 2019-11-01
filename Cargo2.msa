@@ -21,7 +21,7 @@ cargon	equ *
 	pshx
 	pshy
 	
-	clr	negativo
+	clr	negat
 	tsx			
 	ldx	10,x	; Apunto IX a la memoria que cuenta los digitos
 	ldaa	0,x	; Cargo el contador de digitos
@@ -32,7 +32,7 @@ cargon	equ *
 cargo	tsx
 	ldx	2,x	; Apunto IX al bye de negatividad del operando
 	ldaa	0,x	; Cargo el byte de negatividad
-	bne	neg	; Si el numero es negativo, salto
+	bne	nego	; Si el numero es negativo, salto
 	
 	ldd	1,x     ; Cargo en AccB el valor a sumar
 	ldaa	#10     ; Cargo para multiplicar por 10
@@ -40,7 +40,7 @@ cargo	tsx
 	jmp	saltoC1
 
 
-neg	inc	negativo
+nego	inc	negat
 	ldy	#10
 	ldd	1,x       ; Cargo en IY el valor que ya tenía
 	coma
@@ -59,7 +59,7 @@ saltoC1	tsx
 	ldab	0,y	; Cargo el nuevo caracter
 	abx		; Sumo el nuevo caracter
 	xgdx		; Paso el nuevo numero a Accd
-	tst	negativo
+	tst	negat
 	beq	apunto
 	coma
 	comb
@@ -90,5 +90,5 @@ fcargon puly
 ****************************************************************************************************************
 	rseg	VARS
 mem	rmb	2
-negativo	rmb	1
+negat	rmb	1
 	END

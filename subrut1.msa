@@ -32,13 +32,14 @@ outchar equ *
 **************************************************************************
 init 	equ *
 	pshx
-	psha
+	psha		;programación defensiva
+	
 borra	clr	0,x
 	inx
 	deca
 	bne	borra
 	
-	pula
+	pula		;programación defensiva
 	pulx
 	rts
 	
