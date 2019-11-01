@@ -2,8 +2,9 @@
 	public	calculo
 ****************************************************************************************************************
 * CALCULO
-*	Verifica si se pulso alguna tecla y determina las coordenadas de la misma.
-* Parametros recibidos: Ninguno
+*	Si se pulso F (=) en el teclado llama a esta subrutina que se encarga de ver cuales son los operandos y 
+*	 la operación y realizarla.
+* Parametros recibidos: Inicio de número Binary por IX e Inicio de result por IY
 * Parametros entregados: Coordenadas del pulsado por memoria
 ****************************************************************************************************************
 	rseg	CODE
@@ -23,4 +24,5 @@ calculo	equ	*
 	rts
 
 suma	equ	*
+
 	END
