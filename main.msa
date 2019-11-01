@@ -58,20 +58,49 @@ saltoM1	jsr	cargon
 	pulx
 	jmp	lcarga	
 
+
 noN 	ldaa	0,y
 	cmpa	#$2D	
 	bne	noM	; Se apretó "-"?
-	ldaa	0,y
-	ldab	#1
-	jsr	outchar
+	
+	ldx	op1	; Si todavía no hay operando 1
+	beq	nega1	; Salto a nega1
+	ldaa	oper	; Si no hay operador, cargo el 
+	beq	noM	; "-" como operador
+	
+	inc	negop2	; Si no se cumplio nada de lo anterior,
+	ldaa	#$2D	;avisamos que el operando 2 es negativo
+	staa	mdis	;y cargamos el "-" en el display
 	jmp	lcarga
+	
+	
+
+nega1	ldaa	negop1	; Si ya fue negado el operando 1,
+	bne	noM	;uso el '-' como operador aunque op1 sea 0
+	inc	negop1	; Avisamos que el operando 1 es negativo
+	ldaa	#$2D	;y cargamos el "-" en el display
+	staa	mdis
+	jmp	lcarga
+
+
 	
 
 noM	ldaa	0,y
 	beq	nocarga	; Se apretó un operando?
+	ldaa	oper
+	bne	lcarga
 	ldaa	0,y
 	staa	oper
 	clr	digop
+	ldaa	#4
+	ldx	#mdis
+borrando	clr	0,x
+	inx
+	deca
+	bne	borrando
+	ldx	#mdis
+	ldaa	0,y
+	staa	3,x
 	
 lcarga	clc
 	ldx	#mdis
@@ -111,6 +140,6 @@ I_STR	fcb	 0
 	fcb	 7
 	fcb	 8
 	fcb	 9
-	fcc	'+-C*/R'
+	fcc	'+-C*,R'
 	
 	END
