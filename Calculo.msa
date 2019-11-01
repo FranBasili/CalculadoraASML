@@ -14,15 +14,39 @@ calculo	equ	*
 	pshx
 	pshy		;programación defensiva
 	
+	ldaa	#$2D
+	cmpa	2,x
+	beq	resta
+	cmpa	#$2A
+	beq	mula
+	cmpa	#$
+	
+suma	equ	*
 
+
+	bra	fin
 	
 	
-	puly		;programación defensiva
+resta	equ	*
+
+
+	bra	fin
+	
+	
+mula	equ	*
+
+
+	bra	fin
+	
+	
+diva	equ	*
+	
+	
+
+fin	puly		;programación defensiva
 	pulx
 	pula	
 	pulb
 	rts
-
-suma	equ	*
-
+	
 	END
