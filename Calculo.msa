@@ -1,14 +1,28 @@
 	p68h11
 	public	calculo
-
 ****************************************************************************************************************
 * CALCULO
-*	Verifica si se pulso alguna tecla y determina las coordenadas de la misma.
-* Parametros recibidos: Ninguno
-* Parametros entregados: Coordenadas del pulsado por memoria
+*	Si se pulso F (=) en el teclado llama a esta subrutina que se encarga de ver cuales son los operandos y 
+*	 la operación y realizarla.
+* Parametros recibidos: Inicio de número Binary por IX e Inicio de result por IY
+* Parametros entregados: resultado de la opeación en result
 ****************************************************************************************************************
+	rseg	CODE
 calculo	equ	*
+	psha
+	pshb
+	pshx
+	pshy		;programación defensiva
+	
+
+	
+	
+	puly		;programación defensiva
+	pulx
+	pula	
+	pulb
 	rts
 
+suma	equ	*
 
 	END

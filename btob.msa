@@ -39,8 +39,9 @@ cargo	ldx	#10
 	dex
 	pshx
 	bne	cargo
-	pulx
-	puly	;programación defensiva
+	pulx		;corrección de SP
+	
+	puly		;programación defensiva
 	pulx
 	pula	
 	pulb
