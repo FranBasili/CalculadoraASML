@@ -5,8 +5,8 @@ $const.def
 ****************************************************************************************************************
 * CARGON
 *	
-* Parametros recibidos: Origen de la cadena que contiene a operando 1, operador y operando 2 por IX, Ubicación del 
-*caracter a cargar por IY
+* Parametros recibidos: Origen de la cadena que contiene a operando 1, operador y operando 2 por IX, Ubicación 
+*  del caracter a cargar por IY
 * Parametros entregados: Nada
 ****************************************************************************************************************
 	rseg	CODE
