@@ -14,33 +14,42 @@ calculo	equ	*
 	pshx
 	pshy		;programación defensiva
 	
-	ldaa	#$2D
+	ldaa	#$2A
 	cmpa	2,x
-	beq	resta
-	cmpa	#$2A
 	beq	mula
-	cmpa	#$
-	
-suma	equ	*
-
-
-	bra	fin
-	
+	inca
+	cmpa	2,X	
+	beq	suma
+	inca
+	cmpa	2,X	
+	beq	diva
 	
 resta	equ	*
+	ldd	0,x
+	add	4,x	;4,x es el segundo operando en variables
+	std	0,y
+	bra	fin
 
 
+suma	equ	*
+	ldd	0,x
+	subd	4,x	;4,x es el segundo operando en variables
+	std	0,y
 	bra	fin
 	
 	
 mula	equ	*
-
-
+	ldd	#1000	;un indicador para saber que se invoco a la multiplicación
+	std	0,y	;HAY QUE HACER ESTA SUBRUTINA!!!
 	bra	fin
 	
 	
 diva	equ	*
-	
+	ldd	0,x
+	ldx	4,x	;4,x es el segundo operando en variables
+	idiv
+	xgdx
+	std	0,y
 	
 
 fin	puly		;programación defensiva
