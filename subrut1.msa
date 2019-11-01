@@ -1,5 +1,5 @@
 	p68h11
-	public	initdis,outchar,init,secuizq,display
+	public	initdis,outchar,init,display
 $const.def
 	rseg	CODE
 **************************************
@@ -48,7 +48,7 @@ borra	clr	0,x
 *  Carga el contenido de las posiciones de memoria mdis0, mdis1, mdis2, mdis3
 * y muesta su contenido en el display en la posicion 0, 1, 2, 3, respectivamente
 *	Parametros recibidos: Inicio de string con caracteres a mostrar por IX
-*	Parametros entregados: Ninguno
+*	Parametros entregados: El texto mostrado en el display
 **************************************************************************
 
 display	equ	*
@@ -73,53 +73,5 @@ display	equ	*
 	pula
 	rts
 
-***************************************************************************
-*SECUIZQ:
-* Desplaza hacia la izquierda un lugar el contenido de todas las memorias
-* Si solo se encuentra el 0 en el display y se agrega un nuevo digito, elimina
-*el 0
-*que despues se cargan al display y agrega el nuevo caracter
-*	Param. Recibe: Caracter a por AccB, inicio del array por IX
-*	Param. Entrega: Ninguno
-****************************************************************************
-secuizq	equ	*
-	
-	psha		; Guardo AccA en el stack
-	
-	cmpb	#$30
-	bhs	secnum	; Si el caracter es un numero, hago una secuencia
-	jmp	secope	; Si el caracter es un operador, hago otra secuencia
-
-secnum	ldaa	1,x	; Desplazo los contenidos de las memorias que se cargan
-	staa	0,x	;en el display un lugar a la izquierda
-	ldaa	2,x
-	staa	1,x
-	ldaa	3,x	
-	cmpa	#$30	;Si el ultimo digito es 0 
-	bne	load	;y el numero no tenían cifras anteriores 
-	ldaa	2,x	;sobreescribo directamente el nuevo caracter
-	beq	clcero	;sin desplazar el 0
-load	ldaa	3,x
-	staa	2,x
-clcero	ldaa	#$30
-	aba
-	tab
-	stab	3,x	;el caracter derecho
-	pula		;Recupero Acca
-	rts
-	
-secope	ldaa	1,x	; Desplazo los contenidos de las memorias que se cargan
-	staa	0,x	;en el display un lugar a la izquierda
-	ldaa	2,x
-	staa	1,x
-	ldaa	3,x	
-	staa	2,x
-	stab	3,x
-	pula		;Recupero Acca
-	rts
-	
-	
-****************************************************************************
-****************************************************************************
 
 	END

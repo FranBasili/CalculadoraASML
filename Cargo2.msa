@@ -1,17 +1,18 @@
 	p68h11
-	public	cargon
+	public	cargon,cargoop
 	extern	btasci	
+	
 $const.def	
 ****************************************************************************************************************
 * CARGON
-*	
+*	Agrega el nuevo digito al operando actual haciendo las multiplicacion y suma necesarias.  
 * Parametros recibidos: 
-*   Por IX: Origen de la cadena que contiene los operandos.
+*   Por IX: Origen de la cadena que contiene el operando.
 *   Por IY Ubicación del caracter a cargar. 
 *   Por Stack: Dirección del contador de digitos. (mandar primero)
 *   Por Stack: Dirección de la memorias a mostrar por display. (mandar despues)
 *   
-* Parametros entregados: Ninguno
+* Parametros entregados: El nuevo numero en la memoria correspondiente
 ****************************************************************************************************************
 	rseg	CODE
 
@@ -25,7 +26,7 @@ cargon	equ *
 	tsx			
 	ldx	10,x	; Apunto IX a la memoria que cuenta los digitos
 	ldaa	0,x	; Cargo el contador de digitos
-	cmpa 	#3    
+	cmpa 	#digitos    
 	blo	cargo  ; Si ya tenía 3 digitos no sigo cargando
 	jmp	fcargon
 	
@@ -88,6 +89,50 @@ fcargon puly
 ****************************************************************************************************************
 
 ****************************************************************************************************************
+
+
+****************************************************************************************************************
+* CARGOOP
+*	
+* Parametros recibidos: 
+*   Por IX: Direccion de la memoria donde guardo el contador de digitos.
+*   Por IY: Direccion de la memoria donde guardo el operador. 
+*   Por Acca: Operador a cargar
+*   Por Stack: Dirección de las memorias del display.
+*   
+* Parametros entregados: El operando en la memoria correspondiente
+****************************************************************************************************************
+	rseg	CODE
+
+cargoop	equ *
+	psha
+	pshb
+	pshx
+	pshy
+	
+	staa	0,y	; Guardo el operador donde corresponde
+	clr	0,x	; Reseteo el contador de digitos
+	
+	
+	tsx
+	ldx	8,x	; Cargo en IX la dirección de las memorias que se muestran en el display
+	staa	0,x	; Muestro el operador en el primer digito del display
+	ldab	#3
+	inx
+borrando	clr	0,x	; Borro los tres ultimos digitos del display
+	inx
+	decb
+	bne	borrando
+	
+	puly
+	pulx
+	pulb
+	pula
+	rts
+	
+****************************************************************************************************************
+****************************************************************************************************************
+	
 	rseg	VARS
 mem	rmb	2
 negat	rmb	1

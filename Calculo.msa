@@ -1,8 +1,9 @@
 	p68h11
 	public	calculo
+	
 ****************************************************************************************************************
 * CALCULO
-*	Si se pulso F (=) en el teclado llama a esta subrutina que se encarga de ver cuales son los operandos y 
+*	Si se pulso F ('=') en el teclado llama a esta subrutina que se encarga de ver cuales son los operandos y 
 *	 la operación y realizarla.
 * Parametros recibidos: Inicio de número Binary por IX e Inicio de result por IY
 * Parametros entregados: resultado de la opeación en result
@@ -26,14 +27,14 @@ calculo	equ	*
 ****************************************************************************************************************	
 resta	equ	*
 	ldd	0,x
-	addd	4,x	;4,x es el segundo operando en variables
+	subd	4,x	;4,x es el segundo operando en variables
 	std	0,y
 	bra	fin
 
 ****************************************************************************************************************
 suma	equ	*
 	ldd	0,x
-	subd	4,x	;4,x es el segundo operando en variables
+	addd	4,x	;4,x es el segundo operando en variables
 	std	0,y
 	bra	fin
 	

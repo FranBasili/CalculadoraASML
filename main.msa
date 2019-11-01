@@ -3,7 +3,7 @@
 *	Este programa ...
 ****************************************************************************************************************
 	p68h11		;declara el modelo de microprocesador utilizado.
-	extern	initdis,outchar,keypad,init,display,cargon,calculo,delay
+	extern	initdis,outchar,keypad,init,display,cargon,calculo,delay,cargoop,btasci
 $const.def
 	rseg	CODE
 	lds 	#st_ini
@@ -36,9 +36,14 @@ apreto	ldaa	0,y
 noC	ldaa	0,y
 	cmpa	#$52	; Se apretó "="?
 	bne	noR
-	ldaa	0,y
-	ldab	#2
-	jsr	outchar
+	ldx	#op1
+	ldy	#result
+	jsr	calculo
+	ldx	result	
+	stx	op1	; Cargo el resultado en el operando 1
+	ldx	#result
+	ldy	#mdis
+	jsr	btasci
 	jmp	lcarga
 	
 noR	ldaa	0,y
@@ -64,50 +69,44 @@ noN 	ldaa	0,y
 	bne	noM	; Se apretó "-"?
 	
 	ldx	op1	; Si todavía no hay operando 1
-	beq	nega1	; Salto a nega1
+	beq	nega	; Salto a nega1
 	ldaa	oper	; Si no hay operador, cargo el 
 	beq	noM	; "-" como operador
 	
 	inc	negop2	; Si no se cumplio nada de lo anterior,
 	ldaa	#$2D	;avisamos que el operando 2 es negativo
 	staa	mdis	;y cargamos el "-" en el display
+*inc	digop	; Decrementamos en uno los digitos disponibles
 	jmp	lcarga
 	
 	
 
-nega1	ldaa	negop1	; Si ya fue negado el operando 1,
+nega	ldaa	negop1	; Si ya fue negado el operando 1,
 	bne	noM	;uso el '-' como operador aunque op1 sea 0
 	inc	negop1	; Avisamos que el operando 1 es negativo
+*inc	digop	; Decrementamos en uno los digitos disponibles
 	ldaa	#$2D	;y cargamos el "-" en el display
 	staa	mdis
 	jmp	lcarga
 
 
-	
 
 noM	ldaa	0,y
 	beq	nocarga	; Se apretó un operando?
 	ldaa	oper
 	bne	lcarga
-	ldaa	0,y
-	staa	oper
-	clr	digop
-	ldaa	#4
 	ldx	#mdis
-borrando	clr	0,x
-	inx
-	deca
-	bne	borrando
-	ldx	#mdis
+	pshx
 	ldaa	0,y
-	staa	3,x
+	ldx	#digop
+	ldy	#oper
+	jsr	cargoop	; Cargo el operador
 	
-lcarga	clc
-	ldx	#mdis
+	
+lcarga	ldx	#mdis
 	jsr	display
 	jsr	delay
 nocarga	jmp	mlop 
-
 
 ****************************************************************************************************************
 	rseg	VARS
