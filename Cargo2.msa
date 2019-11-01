@@ -5,9 +5,13 @@ $const.def
 ****************************************************************************************************************
 * CARGON
 *	
-* Parametros recibidos: Origen de la cadena que contiene los operandos por IX, Ubicación del 
-*caracter a cargar por IY, Operando a cargar por Acca (0=operando1,1=operando2)
-* Parametros entregados: Nada
+* Parametros recibidos: 
+*   Por IX: Origen de la cadena que contiene los operandos.
+*   Por IY Ubicación del caracter a cargar. 
+*   Por Stack: Dirección del contador de digitos. (mandar primero)
+*   Por Stack: Dirección de la memorias a mostrar por display. (mandar despues)
+*   
+* Parametros entregados: Ninguno
 ****************************************************************************************************************
 	rseg	CODE
 
@@ -17,37 +21,27 @@ cargon	equ *
 	pshx
 	pshy
 	
-	tsta
-	bne	cop2
-	jmp	cargoop1	
-cop2	jmp	cargoop2
-
-
-cargoop1	tsx			
+	clr	negativo
+	tsx			
 	ldx	10,x	; Apunto IX a la memoria que cuenta los digitos
 	ldaa	0,x	; Cargo el contador de digitos
 	cmpa 	#3    
-	bhs	enlace1   ; Si ya tenía 3 digitos no sigo cargando
+	blo	cargo  ; Si ya tenía 3 digitos no sigo cargando
+	jmp	fcargon
 	
-	tsx
-	ldx	2,x
+cargo	tsx
+	ldx	2,x	; Apunto IX al bye de negatividad del operando
 	ldaa	0,x	; Cargo el byte de negatividad
-	bne	neg1	; Si el numero es negativo, salto
-	ldab	0,y     ; Cargo en AccB el valor a sumar
+	bne	neg	; Si el numero es negativo, salto
+	
+	ldd	1,x     ; Cargo en AccB el valor a sumar
 	ldaa	#10     ; Cargo para multiplicar por 10
 	mul
-	tab
-	ldy	1,x     ; Cargo en IY el valor que ya tenía
-	aby
-	sty	1,x
-	tsx		; Apunto IX al contador de digitos
-	ldx	10,x	; Apunto al contador de digitos
-	inc	0,x 	; Inc
-	jmp	apunto
+	jmp	saltoC1
 
-enlace1	jmp	fcargon
 
-neg1	ldy	#10
+neg	inc	negativo
+	ldy	#10
 	ldd	1,x       ; Cargo en IY el valor que ya tenía
 	coma
 	comb
@@ -55,70 +49,35 @@ neg1	ldy	#10
 	std	mem
 	clra
 	clrb
-multi1	addd	mem
+multi	addd	mem
 	dey
-	bne	multi1
+	bne	multi
 	
-	tsx	
-	ldy	0,x	; Apunto IY a donde esta el nuevo caracter
+saltoC1	tsx	
+	ldy	0,x	; Apunto IY a la dir donde esta el nuevo caracter
 	xgdx		; Paso la multiplicacion que tenia en Accd a IX
 	ldab	0,y	; Cargo el nuevo caracter
 	abx		; Sumo el nuevo caracter
 	xgdx		; Paso el nuevo numero a Accd
+	tst	negativo
+	beq	apunto
 	coma
 	comb
 	addd	#1
-	tsx
-	ldx	2,x	; Cargo la dir de neg
-	std	1,x	; Guardo el numero en op2
-	inc 	digop1
-	jmp	apunto
-	
 
-cargoop2	ldaa 	digop2
-	cmpa 	#3    
-	bhs	enlace2   ; Si ya tenía 3 digitos no sigo cargando
-	ldaa	0,x	; Cargo el byte de negatividad
-	bne	neg2	; Si el numero es negativo, salto
-	ldab	0,y     ; Cargo en AccB el valor a sumar
-	ldaa	#10     ; Cargo para multiplicar por 10
-	mul
-	tab
-	ldy	1,x     ; Cargo en IY el valor que ya tenía
-	aby
-	sty	1,x
-	inc 	digop2
-	jmp	apunto
-
-enlace2	jmp	fcargon
-
-neg2	ldy	#10
-	ldd	1,x       ; Cargo en IY el valor que ya tenía
-	coma
-	comb
-	addd	#1
-	std	mem
-	clra
-	clrb
-multi1	addd	mem
-	dey
-	bne	multi1
+apunto	tsx
+	ldx	2,x	; Cargo la dir del indicador de negatividad del operando
+	std	1,x	; Guardo el numero en el operando pedido
 	
-	pshx
-	xgdx		; Paso la multiplicacion que tenia en Accd a IX
-	ldab	0,y
-	abx		; Sumo el nuevo caracter
-	xgdx		; Paso el nuevo numero a Accd
-	pulx		; Recupero IX
-	std	1,x	; Guardo el numero en op1
-	inc 	digop1
+	tsx		
+	ldx	10,x	; Apunto IX al contador de digitos
+	inc	0,x 	; Incremento el contador de digitos
 	
-apunto	tsx	
+	tsx	
 	ldy	8,x	; Cargo en IY la dir de memoria de mdis
-	ldx	2,x	; Cargo en IX	el numero a mostrar
+	ldx	2,x	; Cargo en IX el numero a mostrar
+	inx
 	jsr	btasci	; Voy a la subrutina que convierte y muestra el numero
-	jmp	fcargon
-	
 
 fcargon puly
 	pulx
@@ -130,7 +89,6 @@ fcargon puly
 
 ****************************************************************************************************************
 	rseg	VARS
-digop1	rmb	1
-digop2	rmb	1
 mem	rmb	1
+negativo	rmb	1
 	END

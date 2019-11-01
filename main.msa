@@ -44,24 +44,19 @@ noC	ldaa	0,y
 noR	ldaa	0,y
 	cmpa	#10
 	bhs	noN	; Se apretó un numero?
+	ldx	#digop
+	pshx
+	ldx	#mdis
+	pshx
 	ldaa	oper
 	bne	cargon2
-	ldx	#mdis
-	pshx
 	ldx	#negop1
-	ldaa	#0
-	jsr	cargon
-	jmp	lcarga
-
-cargon2	ldaa	#digiop
-	psha
-	ldx	#mdis
-	pshx
-	ldx	#negop2
-	ldaa	#1
-	jsr	cargon
-	jmp	lcarga
-	
+	jmp	saltoM1	
+cargon2	ldx	#negop2
+saltoM1	jsr	cargon
+	pulx
+	pulx
+	jmp	lcarga	
 
 noN 	ldaa	0,y
 	cmpa	#$2D	
@@ -75,10 +70,13 @@ noN 	ldaa	0,y
 noM	ldaa	0,y
 	beq	nocarga	; Se apretó un operando?
 	ldaa	0,y
-	ldab	#1
-	jsr	outchar
+	staa	oper
+	clr	digop
 	
 lcarga	clc
+	ldx	#mdis
+	jsr	display
+	jsr	delay
 nocarga	jmp	mlop 
 
 
@@ -91,6 +89,7 @@ negop2	rmb	1
 op2	rmb	2
 mdis	rmb	4
 digop	rmb	1
+result	rmb	2
 Nclc	equ	*-negop1
 ****************************************************************************************************************	
 
