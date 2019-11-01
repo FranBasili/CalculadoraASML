@@ -18,29 +18,28 @@ btasci	equ	*
 	bcc	posit
 	ldab	#$2D	;cargo el sibolo negativo -
 	stab	0,y
-	iny
+	ldd	0,x	;cargo el numero a convertir
+	coma	
+	comb
+	addd	#1	;complemento a dos de AccD
 	ldx	#3	;cantidad de numeros a convertir
 	pshx
-	ldd	0,x
-	coma
-	comb
-	addd	#1
 	bra 	cargo
 
-posit	ldx	#4	;cantidad de numeros a convertir
+posit	ldd	0,x
+	ldx	#4	;cantidad de numeros a convertir
 	pshx
-	ldd	0,x
 cargo	ldx	#10
 	idiv
-	xgdx
 	addb	#30	;corrección de número decimal a ASCII		
-	stab	0,y
-	iny
+	stab	3,y
+	dey
 	xgdx
 	pulx
 	dex
+	pshx
 	bne	cargo
-	
+	pulx
 	puly	;programación defensiva
 	pulx
 	pula	
