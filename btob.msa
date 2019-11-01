@@ -15,7 +15,7 @@ btasci	equ	*
 	
 	ldaa	0,x	
 	lsla
-	bcc	posit
+	bcc	posit	;en estas tres primeras lineas verifico si el númmero es negativo
 	ldab	#$2D	;cargo el sibolo negativo -
 	stab	0,y
 	ldd	0,x	;cargo el numero a convertir
@@ -31,7 +31,11 @@ posit	ldd	0,x
 	pshx
 cargo	ldx	#10
 	idiv
-	addb	#$30	;corrección de número decimal a ASCII		
+	incb
+	decb		;analizo si el número es o para no cargar el 0 es ASCII  y que directamente no aparezca nada
+	bne	ncero
+	subb	#$30	;le incrementa $30 para que con la corrección el numero quede en 0
+ncero	addb	#$30	;corrección de número decimal a ASCII		
 	stab	3,y
 	dey
 	xgdx
