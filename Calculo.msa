@@ -39,7 +39,7 @@ suma	equ	*
 	
 	
 mula	equ	*
-	ldd	#1000	;un indicador para saber que se invoco a la multiplicación
+	ldd	#1111	;un indicador para saber que se invoco a la multiplicación
 	std	0,y	;HAY QUE HACER ESTA SUBRUTINA!!!
 	bra	fin
 	
