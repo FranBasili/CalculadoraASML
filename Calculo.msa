@@ -23,34 +23,34 @@ calculo	equ	*
 	inca
 	cmpa	2,X	
 	beq	diva
-	
+****************************************************************************************************************	
 resta	equ	*
 	ldd	0,x
 	add	4,x	;4,x es el segundo operando en variables
 	std	0,y
 	bra	fin
 
-
+****************************************************************************************************************
 suma	equ	*
 	ldd	0,x
 	subd	4,x	;4,x es el segundo operando en variables
 	std	0,y
 	bra	fin
 	
-	
+****************************************************************************************************************	
 mula	equ	*
 	ldd	#1111	;un indicador para saber que se invoco a la multiplicación
 	std	0,y	;HAY QUE HACER ESTA SUBRUTINA!!!
 	bra	fin
 	
-	
+****************************************************************************************************************	
 diva	equ	*
 	ldd	0,x
 	ldx	4,x	;4,x es el segundo operando en variables
 	idiv
 	xgdx
 	std	0,y
-	
+****************************************************************************************************************	
 
 fin	puly		;programación defensiva
 	pulx
