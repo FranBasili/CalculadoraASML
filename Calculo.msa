@@ -14,15 +14,15 @@ calculo	equ	*
 	pshx
 	pshy		;programación defensiva
 	
-	ldaa	#$2A
+	ldaa	#$2A	;comparo con los caracteres de multiplicación en ASCII
 	cmpa	2,x
 	beq	mula
-	inca
+	inca		;comparo con los caracteres de suma en ASCII
 	cmpa	2,X	
 	beq	suma
-	inca
+	inca		;comparo con el caracter que representará a la división en ASCII
 	cmpa	2,X	
-	beq	diva
+	beq	diva	;si no es ninguno de los anteriores tiene que restar 
 ****************************************************************************************************************	
 resta	equ	*
 	ldd	0,x
