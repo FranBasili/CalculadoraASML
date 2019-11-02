@@ -25,11 +25,11 @@ outchar equ *
 	staa 	PORTB	;set the character
 	rts
 	
-**************************************************************************
+********************************************************************************
 *Init: Borra N cantidad de memorias desde la dirección pedida
 *	Parametros recibidos: Dirección de origen por IX, cant memorias AccA
 *	Parametros entregados: Ninguno
-**************************************************************************
+********************************************************************************
 init 	equ *
 	pshx
 	psha		;programación defensiva
@@ -43,13 +43,13 @@ borra	clr	0,x
 	pulx
 	rts
 	
-**************************************************************************
+*********************************************************************************
 *DISPLAY
 *  Carga el contenido de las posiciones de memoria mdis0, mdis1, mdis2, mdis3
 * y muesta su contenido en el display en la posicion 0, 1, 2, 3, respectivamente
 *	Parametros recibidos: Inicio de string con caracteres a mostrar por IX
 *	Parametros entregados: El texto mostrado en el display
-**************************************************************************
+*********************************************************************************
 
 display	equ	*
 
