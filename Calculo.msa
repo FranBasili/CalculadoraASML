@@ -108,9 +108,9 @@ nocom2	xgdx		; Devuelvo de divisor a IX
 	beq	nocomd	; Si no había numeros negativos
 	lsrb		;o ambos eran negativos	no complementamos
 	lsrb		;el cociente obtenido.
-	xgdy
 	bcs	nocomd
-
+        
+xgdy
 	coma		; Una vez realizada la división hago el mismo proceso que hice al 
 	comb		;principio pero ahora para obtener resultado de forma signada.
 	addd	#1	; Sumo uno a AccD
