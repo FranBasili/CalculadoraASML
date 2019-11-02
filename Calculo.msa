@@ -60,4 +60,55 @@ fin	puly		;programación defensiva
 	pulb
 	rts
 	
+	
+	
+**********************************************************************************************
+*DIVISION
+*Esta función recibe por indice D el numero signado a dividir y lo divide por el 
+*numero que se encuentre en IX. El cociente se entrega en AccD 
+*Parametros recibidos: dividendo en AccD, Divisor en IX.
+*Parametros entregados: cociente en AccD, resto por IX.
+**********************************************************************************************
+Division	equ	*
+	pshy
+	
+	xgdy		; transferimos IY a AccD para borrarlo y lo retornamos a IY
+	clra
+	clrb
+	xgdy
+
+	tsta		; Actualizamos el CCR en funcion del dividendo
+	bge	nocom1	; Solo si no es negativo, saltamos directo a la división
+	iny		; Incremento el contador de numeros negativos
+	com	neg	; Si es negativo cargo un "-1" en el flag de negatividad
+	coma		; Comienzo realizando un complemento a 2 de forma semimanual, para ello:
+	comb		;complemento a 1 Acca y Accb por separado  
+	addd	#1	; Sumo uno a AccD
+	
+	xgdx
+nocom1	bge	nocom2	; Solo si no es negativo, saltamos directo a la división
+	iny		; Incremento el contador de numeros negativos
+	com	neg	; Si es negativo cargo un "-1" en el flag de negatividad
+	coma		; Comienzo realizando un complemento a 2 de forma semimanual, para ello:
+	comb		;complemento a 1 Acca y Accb por separado  
+	addd	#1	; Sumo uno a AccD
+	xgdx
+	
+nocom2	idiv		; Divido el resultado de la suma por la cant de elementos que sume.
+	xgdx		; Transfiero el cociente de IX a Accd.
+	tst	neg	; Actualizo el CCR en función a la memoria de negatividad
+	beq	noC2	; Si el numero era originalmente negativo
+	coma		; Una vez realizada la división hago el mismo proceso que hice al 
+	comb		;principio pero ahora para obtener resultado de forma signada.
+	addb	#1
+	bcc	noC2	
+	inca
+noC2	puly
+	rts		; Retorno a la subrutina sin haber modificado ningún registro no deseado
+	
+**********************************************************************************************
+**********************************************************************************************
+	rseg	VARS
+neg	fcb 	1		;Reservo una memoria donde se indica si el dividendo es o no negativo. 
+				
 	END
