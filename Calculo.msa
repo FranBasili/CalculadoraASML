@@ -106,11 +106,10 @@ erase	clr	0,x	; Borro los tres ultimos digitos del display
 	jsr	display	; Refresco el display
 	
 waitclr	tsx
-	jsr	delay
 	ldy	0,x	; Si entre en error, lo mantengo en el bucle
 	jsr	keypad	;hasta que se aprete clear y se borren todas 
 	ldaa	0,y	;las memorias
-	cmpa	#$34
+	cmpa	#$43
 	bne	waitclr
 	
 	tsx		; Creo un framepointer
