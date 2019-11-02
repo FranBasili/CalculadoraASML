@@ -31,7 +31,8 @@ diva	equ	*
 	idiv
 	xgdx
 	std	0,y
-
+	bra	fin
+	
 ****************************************************************************************************************	
 resta	equ	*
 	ldd	0,x
@@ -50,7 +51,6 @@ suma	equ	*
 mula	equ	*
 	ldd	#1111	;un indicador para saber que se invoco a la multiplicación
 	std	0,y	;HAY QUE HACER ESTA SUBRUTINA!!!
-	bra	fin
 	
 ****************************************************************************************************************	
 
