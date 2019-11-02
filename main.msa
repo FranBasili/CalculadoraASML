@@ -15,7 +15,7 @@ $const.def
 	ldx	#mdis
 	staa	3,x
 	jsr 	display	
-mlop	ldy	#I_STR
+mloop	ldy	#I_STR
 	jsr	keypad
 	
 	bcs	apreto
@@ -36,10 +36,17 @@ apreto	ldaa	0,y
 noC	ldaa	0,y
 	cmpa	#$52	; Se apretó "="?
 	bne	noR
-	ldx	#op1
+	ldaa	oper
+	bne	sigo
+	jmp	nocarga
+	
+sigo	ldx	#op1
 	ldy	#result
 	jsr	calculo
-	ldx	result	
+	bcc	noerror
+	jmp	error
+	
+noerror	ldx	result	
 	stx	op1	; Cargo el resultado en el operando 1
 	ldx	#result
 	ldy	#mdis
@@ -108,12 +115,23 @@ noM	ldaa	0,y
 	ldx	#digop
 	ldy	#oper
 	jsr	cargoop	; Cargo el operador
+	jmp	lcarga
+	
+error	equ	*
+	ldaa	#$45
+	staa	6,x	; Cargo "E" en la primer memoria del display
+	ldab	#3
+	inx
+borrando	clr	0,x	; Borro los tres ultimos digitos del display
+	inx
+	decb
+	bne	borrando	
 	
 	
 lcarga	ldx	#mdis
 	jsr	display
 	jsr	delay
-nocarga	jmp	mlop 
+nocarga	jmp	mloop 
 
 ****************************************************************************************************************
 	rseg	VARS

@@ -28,31 +28,41 @@ calculo	equ	*
 diva	equ	*
 	ldd	0,x
 	ldx	4,x	;4,x es el segundo operando en variables
-	idiv
-	xgdx
+	tsx
+	bne	divido
+	jmp	error
+	
+divido	jsr	Division
 	std	0,y
-	bra	fin
+	clc
+	jmp	fin
 	
 ****************************************************************************************************************	
 resta	equ	*
 	ldd	0,x
 	subd	4,x	;4,x es el segundo operando en variables
 	std	0,y
-	bra	fin
+	clc
+	jmp	fin
 
 ****************************************************************************************************************
 suma	equ	*
 	ldd	0,x
 	addd	4,x	;4,x es el segundo operando en variables
 	std	0,y
-	bra	fin
+	clc
+	jmp	fin
 	
 ****************************************************************************************************************	
 mula	equ	*
 	ldd	#1111	;un indicador para saber que se invoco a la multiplicación
 	std	0,y	;HAY QUE HACER ESTA SUBRUTINA!!!
-	
+	clc
+	jmp	fin
 ****************************************************************************************************************	
+
+error	equ	*
+	sec
 
 fin	puly		;programación defensiva
 	pulx
@@ -72,43 +82,45 @@ fin	puly		;programación defensiva
 Division	equ	*
 	pshy
 	
-	xgdy		; transferimos IY a AccD para borrarlo y lo retornamos a IY
-	clra
-	clrb
-	xgdy
-
+	ldy	#0	; Borramos IY para usarlo como contador
 	tsta		; Actualizamos el CCR en funcion del dividendo
-	bge	nocom1	; Solo si no es negativo, saltamos directo a la división
+	bge	nocom1	; Solo si no es negativo, saltamos directo al analisis del divisor
 	iny		; Incremento el contador de numeros negativos
-	com	neg	; Si es negativo cargo un "-1" en el flag de negatividad
 	coma		; Comienzo realizando un complemento a 2 de forma semimanual, para ello:
 	comb		;complemento a 1 Acca y Accb por separado  
 	addd	#1	; Sumo uno a AccD
 	
-	xgdx
-nocom1	bge	nocom2	; Solo si no es negativo, saltamos directo a la división
+nocom1	xgdx		; Analizamos el divisor
+	tsta
+	bge	nocom2	; Solo si no es negativo, saltamos directo a la división
 	iny		; Incremento el contador de numeros negativos
-	com	neg	; Si es negativo cargo un "-1" en el flag de negatividad
 	coma		; Comienzo realizando un complemento a 2 de forma semimanual, para ello:
 	comb		;complemento a 1 Acca y Accb por separado  
 	addd	#1	; Sumo uno a AccD
-	xgdx
 	
-nocom2	idiv		; Divido el resultado de la suma por la cant de elementos que sume.
+	
+nocom2	xgdx		; Devuelvo de divisor a IX
+	idiv		; Divido el resultado de la suma por la cant de elementos que sume.
 	xgdx		; Transfiero el cociente de IX a Accd.
-	tst	neg	; Actualizo el CCR en función a la memoria de negatividad
-	beq	noC2	; Si el numero era originalmente negativo
+	
+	xgdy
+	tstb
+	beq	nocomd	; Si no había numeros negativos
+	lsrb		;o ambos eran negativos	no complementamos
+	lsrb		;el cociente obtenido.
+	xgdy
+	bcs	nocomd
+
 	coma		; Una vez realizada la división hago el mismo proceso que hice al 
 	comb		;principio pero ahora para obtener resultado de forma signada.
-	addb	#1
-	bcc	noC2	
-	inca
-noC2	puly
+	addd	#1	; Sumo uno a AccD
+	jmp	find
+
+nocomd	xgdy
+find	puly
 	rts		; Retorno a la subrutina sin haber modificado ningún registro no deseado
 	
 **********************************************************************************************
 **********************************************************************************************
-	rseg	VARS
-neg	fcb 	1		;Reservo una memoria donde se indica si el dividendo es o no negativo. 
-				
+		
 	END
