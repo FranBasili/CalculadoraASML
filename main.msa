@@ -3,13 +3,13 @@
 *	Este programa ...
 ****************************************************************************************************************
 	p68h11		;declara el modelo de microprocesador utilizado.
-	extern	initdis,outchar,keypad,init,display,cargon,calculo,delay,cargoop,btasci
+	extern	initdis,outchar,keypad,init,display,cargon,calculo,delay,cargoop,btasci,error
 $const.def
 	rseg	CODE
 	lds 	#st_ini
 	jsr	initdis
 	ldx	#negop1
-	ldaa	#Nclc	
+	ldaa	#NCLC	
 	jsr	init
 	ldaa	#$30
 	ldx	#mdis
@@ -24,13 +24,12 @@ mloop	ldy	#I_STR
 apreto	ldaa	0,y
 	cmpa	#$43	;Se apretó Clear?
 	bne	noC
-reseteo	ldx	#negop1
-	ldaa	#Nclc	
+	ldx	#negop1
+	ldaa	#NCLC	
 	jsr	init
 	ldaa	#$30
 	ldx	#mdis
 	staa	3,x
-	jsr	display
 	jmp	lcarga
 	
 noC	ldaa	0,y
@@ -44,7 +43,7 @@ sigo	ldx	#op1
 	ldy	#result
 	jsr	calculo
 	bcc	noerror
-	jmp	error
+	jmp	err
 	
 noerror	ldx	result	
 	stx	op1	;Cargo el resultado en el operando 1
@@ -123,26 +122,16 @@ coper	ldx	#mdis
 	ldx	#digop
 	ldy	#oper
 	jsr	cargoop	; Cargo el operador
+	pulx
 	jmp	lcarga
 	
-error	equ	*
-	ldaa	#$45
-	staa	mdis	; Cargo "E" en la primer memoria del display
-	ldab	#3
-	ldx	#mdis+1
-erase	clr	0,x	; Borro los tres ultimos digitos del display
-	inx
-	decb
-	bne	erase
-	ldx	#mdis
-	jsr	display
-waitclr	ldy	#I_STR	; Si entre en error, lo mantengo en el bucle
-	jsr	keypad	;hasta que se aprete clear y se borren todas 
-	ldaa	0,y	;las memorias
-	cmpa	#$43	
-	bne	waitclr
-	jmp	reseteo
-	
+err	ldx	#mdis
+	pshx
+	ldy	#I_STR
+	ldx	#negop1
+	ldab	#NCLC
+	jsr	error
+	pulx		;Compensamos el pasaje de variables por stack
 	
 lcarga	ldx	#mdis
 	jsr	display
@@ -160,7 +149,7 @@ mdis	rmb	4
 digop	rmb	1
 result	rmb	2
 recur	rmb	1	; 1=recursivo  0 = no recursivo
-Nclc	equ	*-negop1
+NCLC	equ	*-negop1
 ****************************************************************************************************************	
 
 ****************************************************************************************************************

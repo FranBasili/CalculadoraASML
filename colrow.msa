@@ -5,7 +5,7 @@ $const.def
 ****************************************************************************************************************
 * KEYPAD
 *	Verifica si se pulso alguna tecla y determina las coordenadas de la misma.
-* Parametros recibidos: Ninguno
+* Parametros recibidos: Dirección del string del teclado por IY.
 * Parametros entregados: Coordenadas del pulsado por memoria
 ****************************************************************************************************************
 	rseg	CODE
