@@ -28,7 +28,7 @@ calculo	equ	*
 diva	equ	*
 	ldd	0,x
 	ldx	4,x	;4,x es el segundo operando en variables
-	bne	divido
+	bne	divido	;si el divisor es 0 que resulte en un error
 	jmp	error
 	
 divido	jsr	Division
@@ -41,35 +41,33 @@ resta	equ	*
 	ldd	0,x
 	subd	4,x	;4,x es el segundo operando en variables
 	std	0,y
-	clc
+	clc		;indico que la cuenta esta bien
 	jmp	fin
 
 ****************************************************************************************************************
 suma	equ	*
 	ldd	0,x
 	addd	4,x	;4,x es el segundo operando en variables
+	cpd	#10000	;comparo con el máximo valor de 3 digitos
+	bpl	error
 	std	0,y
-	clc
+	clc		;indico que la cuenta esta bien
 	jmp	fin
 	
 ****************************************************************************************************************	
 mula	equ	*
-	ldd	#1111	;un indicador para saber que se invoco a la multiplicación
+	ldd	#1234	;un indicador para saber que se invoco a la multiplicación
 	std	0,y	;HAY QUE HACER ESTA SUBRUTINA!!!
-	clc
+	clc		;indico que la cuenta esta bien
 	jmp	fin
 ****************************************************************************************************************	
 
-error	equ	*
-	sec
-
+error	sec		;indico por el carry (=1) que hay un error en la cuenta
 fin	puly		;programación defensiva
 	pulx
 	pula	
 	pulb
 	rts
-	
-	
 	
 **********************************************************************************************
 *DIVISION
