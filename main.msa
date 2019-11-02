@@ -44,6 +44,8 @@ noC	ldaa	0,y
 	ldx	#result
 	ldy	#mdis
 	jsr	btasci
+	ldaa	#1
+	staa	recur
 	jmp	lcarga
 	
 noR	ldaa	0,y
@@ -70,7 +72,12 @@ noN 	ldaa	0,y
 	
 	ldx	op1	; Si todavía no hay operando 1
 	beq	nega	; Salto a nega1
-	ldaa	oper	; Si no hay operador, cargo el 
+	ldaa	recur
+	beq	norecur	; Si estoy en modo recursivo, acepto modificar el operador
+	clr	recur
+	jmp	noM
+	
+norecur	ldaa	oper	; Si no hay operador, cargo el 
 	beq	noM	; "-" como operador
 	
 	inc	negop2	; Si no se cumplio nada de lo anterior,
@@ -118,6 +125,7 @@ op2	rmb	2
 mdis	rmb	4
 digop	rmb	1
 result	rmb	2
+recur	rmb	1	; 1=recursivo  0 = no recursivo
 Nclc	equ	*-negop1
 ****************************************************************************************************************	
 
