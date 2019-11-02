@@ -22,7 +22,7 @@ mloop	ldy	#I_STR
 	jmp	nocarga
 	
 apreto	ldaa	0,y
-	cmpa	#$43	; Se apretó Clear?
+	cmpa	#$43	;Se apretó Clear?
 	bne	noC
 	ldx	#negop1
 	ldaa	#Nclc	
@@ -34,7 +34,7 @@ apreto	ldaa	0,y
 	jmp	lcarga
 	
 noC	ldaa	0,y
-	cmpa	#$52	; Se apretó "="?
+	cmpa	#$52	;Se apretó "="?
 	bne	noR
 	ldaa	oper
 	bne	sigo
@@ -47,7 +47,7 @@ sigo	ldx	#op1
 	jmp	error
 	
 noerror	ldx	result	
-	stx	op1	; Cargo el resultado en el operando 1
+	stx	op1	;Cargo el resultado en el operando 1
 	ldx	#result
 	ldy	#mdis
 	jsr	btasci

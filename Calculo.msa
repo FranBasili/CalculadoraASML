@@ -40,6 +40,8 @@ divido	jsr	Division
 resta	equ	*
 	ldd	0,x
 	subd	4,x	;4,x es el segundo operando en variables
+	cpd	#-1000	;comparo con el máximo valor de 3 digitos
+	bmi	error
 	std	0,y
 	clc		;indico que la cuenta esta bien
 	jmp	fin
