@@ -20,19 +20,10 @@ calculo	equ	*
 	inca		;comparo con los caracteres de suma en ASCII
 	cmpa	2,X	
 	beq	suma
-	inca	;comparo con el caracter que representará a la división en ASCII
+	inca
 	inca
 	cmpa	2,X	
 	beq	resta	;si no es ninguno de los anteriores tiene que restar 
-
-	inca		
-	cmpa	2,X	;comparo con el caracter de suma en ASCII
-	beq	suma	
-	inca	
-	inca
-	cmpa	2,X	;comparo con el caracter de resta en ASCII
-	beq	resta	;si no es ninguno de los anteriores tiene que dividir 
-
 ****************************************************************************************************************	
 diva	equ	*
 	ldd	0,x
@@ -40,7 +31,8 @@ diva	equ	*
 	idiv
 	xgdx
 	std	0,y
-
+	bra	fin
+	
 ****************************************************************************************************************	
 resta	equ	*
 	ldd	0,x
@@ -59,7 +51,6 @@ suma	equ	*
 mula	equ	*
 	ldd	#1111	;un indicador para saber que se invoco a la multiplicación
 	std	0,y	;HAY QUE HACER ESTA SUBRUTINA!!!
-	bra	fin
 	
 ****************************************************************************************************************	
 
