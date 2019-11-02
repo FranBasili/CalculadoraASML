@@ -126,7 +126,8 @@ error	equ	*
 	staa	6,x	; Cargo "E" en la primer memoria del display
 	ldab	#3
 	inx
-erase	clr	0,x	; Borro los tres ultimos digitos del display
+erase	clra	0,x	; Borro los tres ultimos digitos del display
+	staa	6,x
 	inx
 	decb
 	bne	erase	
