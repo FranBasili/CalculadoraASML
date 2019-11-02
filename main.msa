@@ -24,7 +24,7 @@ mloop	ldy	#I_STR
 apreto	ldaa	0,y
 	cmpa	#$43	;Se apretó Clear?
 	bne	noC
-	ldx	#negop1
+reseteo	ldx	#negop1
 	ldaa	#Nclc	
 	jsr	init
 	ldaa	#$30
@@ -108,6 +108,10 @@ noM	ldaa	0,y
 	beq	nocarga	; Se apretó un operando?
 	ldaa	recur 
 	beq	sal10 ; Si no estoy en modo recursivo, analizo si tengo operador
+	ldx	#op2
+	clr	0,x	;Borro el MSB del operando 2
+	clr	1,x	;Borro el LSB del operando 2
+	clr	digop
 	clc	recur ; Borro la recursividad
 	jmp	coper
 
@@ -130,11 +134,15 @@ erase	clr	0,x	; Borro los tres ultimos digitos del display
 	inx
 	decb
 	bne	erase
+	ldx	#mdis
+	jsr	display
 waitclr	ldy	#I_STR	; Si entre en error, lo mantengo en el bucle
 	jsr	keypad	;hasta que se aprete clear y se borren todas 
 	ldaa	0,y	;las memorias
 	cmpa	#$43	
 	bne	waitclr
+	jmp	reseteo
+	
 	
 lcarga	ldx	#mdis
 	jsr	display
