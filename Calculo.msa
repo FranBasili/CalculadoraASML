@@ -40,7 +40,7 @@ divido	jsr	Division
 resta	equ	*
 	ldd	0,x
 	subd	4,x	;4,x es el segundo operando en variables
-	cpd	#-1000	;comparo con el máximo valor de 3 digitos
+	cpd	#MIN	;comparo con el máximo valor de 3 digitos
 	bmi	error
 	std	0,y
 	clc		;indico que la cuenta esta bien
@@ -50,7 +50,7 @@ resta	equ	*
 suma	equ	*
 	ldd	0,x
 	addd	4,x	;4,x es el segundo operando en variables
-	cpd	#10000	;comparo con el máximo valor de 3 digitos
+	cpd	#MAX	;comparo con el máximo valor de 3 digitos
 	bpl	error
 	std	0,y
 	clc		;indico que la cuenta esta bien

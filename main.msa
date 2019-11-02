@@ -136,7 +136,6 @@ waitclr	ldy	#I_STR	; Si entre en error, lo mantengo en el bucle
 	cmpa	#$43	
 	bne	waitclr
 	
-	
 lcarga	ldx	#mdis
 	jsr	display
 	jsr	delay
