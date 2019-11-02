@@ -110,5 +110,5 @@ noC2	puly
 **********************************************************************************************
 	rseg	VARS
 neg	fcb 	1		;Reservo una memoria donde se indica si el dividendo es o no negativo. 
-				
+	
 	END
