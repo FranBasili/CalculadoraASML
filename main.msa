@@ -139,6 +139,6 @@ I_STR	fcb	 0
 	fcb	 7
 	fcb	 8
 	fcb	 9
-	fcc	'+-C*,R'
+	fcc	'+-C/*R'
 	
 	END
