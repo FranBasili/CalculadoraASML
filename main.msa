@@ -81,7 +81,6 @@ noN 	ldaa	0,y
 	beq	nega	; Salto a nega1
 	ldaa	recur
 	beq	norecur	; Si estoy en modo recursivo, acepto modificar el operador
-	clr	recur
 	jmp	noM
 	
 norecur	ldaa	oper	; Si no hay operador, cargo el 
@@ -107,9 +106,14 @@ nega	ldaa	negop1	; Si ya fue negado el operando 1,
 
 noM	ldaa	0,y
 	beq	nocarga	; Se apretó un operando?
-	ldaa	oper
-	bne	lcarga
-	ldx	#mdis
+ldaa recur 
+beq salto10 ; Si no estoy en modo recursivo, analizo si tengo operador
+clc recur ; Borro la recursividad
+jmp coper
+
+salto10        ldaa	oper ;verifico que no haya operador cargado
+	bne	lcarga ; Si hay operador, no cargo el carácter presionado
+coper	ldx	#mdis
 	pshx
 	ldaa	0,y
 	ldx	#digop
