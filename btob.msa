@@ -15,7 +15,7 @@ btasci	equ	*
 	
 	ldaa	0,x	
 	lsla
-	bcc	posit
+	bcc	posit	;en estas tres primeras lineas verifico si el númmero es negativo
 	ldab	#$2D	;cargo el sibolo negativo -
 	stab	0,y
 	ldd	0,x	;cargo el numero a convertir
@@ -32,11 +32,11 @@ posit	ldd	0,x
 cargo	ldx	#10
 	idiv
 	addb	#$30	;corrección de número decimal a ASCII		
-	stab	3,y
-	dey
-	xgdx
-	pulx
-	dex
+	stab	3,y	;lo cargo en mdis para luego ser mostrado en el display
+	dey		;recorro los elementos del display
+	xgdx		;intercambio para no perder el resto es que lo que se seguira dividiendo
+	pulx	
+	dex		;decremento el contador de divisiones
 	pshx
 	bne	cargo
 	pulx		;corrección de SP

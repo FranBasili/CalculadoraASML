@@ -21,9 +21,18 @@ calculo	equ	*
 	inca		;comparo con los caracteres de suma en ASCII
 	cmpa	2,X	
 	beq	suma
-	inca		;comparo con el caracter que representará a la división en ASCII
+	inca	;comparo con el caracter que representará a la división en ASCII
+	inca
 	cmpa	2,X	
-	beq	diva	;si no es ninguno de los anteriores tiene que restar 
+	beq	resta	;si no es ninguno de los anteriores tiene que restar 
+****************************************************************************************************************	
+diva	equ	*
+	ldd	0,x
+	ldx	4,x	;4,x es el segundo operando en variables
+	idiv
+	xgdx
+	std	0,y
+
 ****************************************************************************************************************	
 resta	equ	*
 	ldd	0,x
@@ -44,13 +53,6 @@ mula	equ	*
 	std	0,y	;HAY QUE HACER ESTA SUBRUTINA!!!
 	bra	fin
 	
-****************************************************************************************************************	
-diva	equ	*
-	ldd	0,x
-	ldx	4,x	;4,x es el segundo operando en variables
-	idiv
-	xgdx
-	std	0,y
 ****************************************************************************************************************	
 
 fin	puly		;programación defensiva
