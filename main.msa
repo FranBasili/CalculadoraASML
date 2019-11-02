@@ -111,7 +111,7 @@ noM	ldaa	0,y
 	clc	recur ; Borro la recursividad
 	jmp	coper
 
-sal10   ldaa	oper ;verifico que no haya operador cargado
+sal10	ldaa	oper ;verifico que no haya operador cargado
 	bne	lcarga ; Si hay operador, no cargo el carácter presionado
 coper	ldx	#mdis
 	pshx
@@ -123,11 +123,10 @@ coper	ldx	#mdis
 	
 error	equ	*
 	ldaa	#$45
-	staa	6,x	; Cargo "E" en la primer memoria del display
+	staa	mdis	; Cargo "E" en la primer memoria del display
 	ldab	#3
-	inx
-erase	clra	0,x	; Borro los tres ultimos digitos del display
-	staa	6,x
+	ldx	#mdis+1
+erase	clr	0,x	; Borro los tres ultimos digitos del display
 	inx
 	decb
 	bne	erase	
