@@ -1,6 +1,5 @@
 	p68h11
 	public	calculo
-	
 ****************************************************************************************************************
 * CALCULO
 *	Si se pulso F ('=') en el teclado llama a esta subrutina que se encarga de ver cuales son los operandos y 
@@ -15,16 +14,16 @@ calculo	equ	*
 	pshx
 	pshy		;programación defensiva
 	
-	ldaa	#$2A	;comparo con los caracteres de multiplicación en ASCII
+	ldaa	#$2A	;comparo con el caracter de multiplicación en ASCII
 	cmpa	2,x
 	beq	mula
-	inca		;comparo con los caracteres de suma en ASCII
-	cmpa	2,X	
-	beq	suma
-	inca	;comparo con el caracter que representará a la división en ASCII
+	inca		
+	cmpa	2,X	;comparo con el caracter de suma en ASCII
+	beq	suma	
+	inca	
 	inca
-	cmpa	2,X	
-	beq	resta	;si no es ninguno de los anteriores tiene que restar 
+	cmpa	2,X	;comparo con el caracter de resta en ASCII
+	beq	resta	;si no es ninguno de los anteriores tiene que dividir 
 ****************************************************************************************************************	
 diva	equ	*
 	ldd	0,x
