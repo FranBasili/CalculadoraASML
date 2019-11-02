@@ -31,11 +31,7 @@ posit	ldd	0,x
 	pshx
 cargo	ldx	#10
 	idiv
-	incb
-	decb		;analizo si el número es o para no cargar el 0 es ASCII  y que directamente no aparezca nada
-	bne	ncero
-	subb	#$30	;le incrementa $30 para que con la corrección el numero quede en 0
-ncero	addb	#$30	;corrección de número decimal a ASCII		
+	addb	#$30	;corrección de número decimal a ASCII		
 	stab	3,y	;lo cargo en mdis para luego ser mostrado en el display
 	dey		;recorro los elementos del display
 	xgdx		;intercambio para no perder el resto es que lo que se seguira dividiendo
