@@ -23,7 +23,7 @@
 ****************************************************************************************************************	
 	p68h11
 	public	delay
-V1	equ	$20	;constante de corección para un mejor efecto visual segun el equipo donde se simula
+V1	equ	$15	;constante de corección para un mejor efecto visual segun el equipo donde se simula
 V2	equ	$FFFF	;paramero del IX para poder generar un delay de 0.5Seg
 	rseg	CODE
 delay	equ	*
