@@ -129,7 +129,7 @@ error	equ	*
 erase	clr	0,x	; Borro los tres ultimos digitos del display
 	inx
 	decb
-	bne	erase	
+	bne	erase
 waitclr	ldy	#I_STR	; Si entre en error, lo mantengo en el bucle
 	jsr	keypad	;hasta que se aprete clear y se borren todas 
 	ldaa	0,y	;las memorias
