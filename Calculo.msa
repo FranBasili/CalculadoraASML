@@ -2,10 +2,10 @@
 	public	calculo
 ****************************************************************************************************************
 * CALCULO
-*	Si se pulso F ('=') en el teclado llama a esta subrutina que se encarga de ver cuales son los operandos y 
-*	 la operación y realizarla.
+*	Si se pulso F ('=') en el teclado llama a esta subrutina que se encarga de ver cuales son los operandos 
+*	 y la operación y realizarla.
 * Parametros recibidos: Inicio de número Binary por IX e Inicio de result por IY
-* Parametros entregados: resultado de la opeación en result
+* Parametros entregados: Resultado de la opeación en la variable en la memoria definida como result
 ****************************************************************************************************************
 	rseg	CODE
 calculo	equ	*
@@ -20,15 +20,14 @@ calculo	equ	*
 	inca		;comparo con los caracteres de suma en ASCII
 	cmpa	2,X	
 	beq	suma
-	inca
+	inca		;comparo con los caracteres de resta en ASCII
 	inca
 	cmpa	2,X	
-	beq	resta	;si no es ninguno de los anteriores tiene que restar 
+	beq	resta	;si no es ninguno de los anteriores tiene que dividir 
 ****************************************************************************************************************	
 diva	equ	*
 	ldd	0,x
 	ldx	4,x	;4,x es el segundo operando en variables
-	tsx
 	bne	divido
 	jmp	error
 	

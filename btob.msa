@@ -22,23 +22,23 @@ btasci	equ	*
 	coma	
 	comb
 	addd	#1	;complemento a dos de AccD
-	ldx	#3	;cantidad de numeros a convertir
+	ldx	#3	;cantidad de numeros a convertir (como es negativo es uno menos)
 	pshx
 	bra 	cargo
 
 posit	ldd	0,x
 	ldx	#4	;cantidad de numeros a convertir
-	pshx
-cargo	ldx	#10
+	pshx		;uso una variable temporal que estara en el stack
+cargo	ldx	#10	
 	idiv
 	addb	#$30	;corrección de número decimal a ASCII		
 	stab	3,y	;lo cargo en mdis para luego ser mostrado en el display
 	dey		;recorro los elementos del display
-	xgdx		;intercambio para no perder el resto es que lo que se seguira dividiendo
+	xgdx		;intercambio para no perder lo que se seguira dividiendo
 	pulx	
-	dex		;decremento el contador de divisiones
+	dex		;decremento el contador de divisiones (variable temporal)
 	pshx
-	bne	cargo
+	bne	cargo	;si el contador es cero es porque cargo todos los elementos del display
 	pulx		;corrección de SP
 	
 	puly		;programación defensiva

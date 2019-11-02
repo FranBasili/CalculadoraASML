@@ -106,12 +106,12 @@ nega	ldaa	negop1	; Si ya fue negado el operando 1,
 
 noM	ldaa	0,y
 	beq	nocarga	; Se apretó un operando?
-ldaa recur 
-beq salto10 ; Si no estoy en modo recursivo, analizo si tengo operador
-clc recur ; Borro la recursividad
-jmp coper
+	ldaa	recur 
+	beq	sal10 ; Si no estoy en modo recursivo, analizo si tengo operador
+	clc	recur ; Borro la recursividad
+	jmp	coper
 
-salto10        ldaa	oper ;verifico que no haya operador cargado
+sal10   ldaa	oper ;verifico que no haya operador cargado
 	bne	lcarga ; Si hay operador, no cargo el carácter presionado
 coper	ldx	#mdis
 	pshx
