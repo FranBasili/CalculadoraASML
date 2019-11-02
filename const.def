@@ -18,5 +18,5 @@ FIL3 	equ 	00000111b
 *************Caracteristicas de Hardware******************
 digitos	equ	3
 MAX	equ	10000
-MIN	equ	1000
+MIN	equ	-1000
 **********************************************************

@@ -31,7 +31,7 @@ diva	equ	*
 	ldd	0,x
 	ldx	4,x	;4,x es el segundo operando en variables
 	bne	divido	;si el divisor es 0 que resulte en un error
-	jmp	error
+	jmp	errcal
 	
 divido	jsr	Division
 	std	0,y
@@ -43,7 +43,7 @@ resta	equ	*
 	ldd	0,x
 	subd	4,x	;4,x es el segundo operando en variables
 	cpd	#MIN	;comparo con el máximo valor de 3 digitos
-	bmi	error
+	bmi	errcal
 	std	0,y
 	clc		;indico que la cuenta esta bien
 	jmp	fin
