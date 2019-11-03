@@ -3,7 +3,9 @@
 ****************************************************************************************************************
 * 		Binary to ASCII
 * Transforma un numero en bcd a binario
-* Parametros recibidos:  Inicio de número Binary por IX e Inicio de mdis por IY
+* Parametros recibidos:  
+*    Inicio del arreglo de numeros por IX  
+*    Inicio de mdis por IY
 * Parametros entregados: Numero en bcd en la memoria pedida por IY
 ****************************************************************************************************************
 	rseg	CODE

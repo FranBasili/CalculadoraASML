@@ -35,38 +35,38 @@ apreto	ldaa	0,y
 noC	ldaa	0,y
 	cmpa	#$52	; Analizo si se apretó "R"
 	bne	noR
-	ldaa	oper	; S
+	ldaa	oper	; Si no hay operando, ignoro que se haya apretado "R"
 	bne	sigo
 	jmp	nocarga
 	
-sigo	ldx	#op1
-	ldy	#result
+sigo	ldx	#op1	; Si hay operando, salto a la subrutina 
+	ldy	#result	; que calcula el resultado de la cuenta.
 	jsr	calculo
-	bcc	noerror
-	jmp	err
+	bcc	noerror	; Si la subrutina, me dice que hay error,
+	jmp	err	;salto al estado "error"
 	
-noerror	ldx	result	
-	stx	op1	;Cargo el resultado en el operando 1
+noerror	ldx	result	; Si no hay error:
+	stx	op1	; Cargo el resultado en el operando 1
 	ldx	#result
-	ldy	#mdis
-	jsr	btasci
-	ldaa	#1
-	staa	recur
+	ldy	#mdis	; Salto a la subrutina que me muestra
+	jsr	btasci	; el resultado en el display 
+	ldaa	#1	; Aviso por recur, que ya realice una
+	staa	recur	;operación
 	jmp	lcarga
 	
 noR	ldaa	0,y
 	cmpa	#10
-	bhs	noN	; Se apretó un numero?
-	ldx	#digop
+	bhs	noN	; Verifico si se apretó un numero
+	ldx	#digop	
 	pshx
 	ldx	#mdis
 	pshx
 	ldaa	oper
-	bne	cargon2
-	ldx	#negop1
+	bne	cargon2	; Si hay operador, utilizo cargon 
+	ldx	#negop1	;en operando 2
 	jmp	saltoM1	
-cargon2	ldx	#negop2
-saltoM1	jsr	cargon
+cargon2	ldx	#negop2	; Si no hay operador, utilizo cargon 
+saltoM1	jsr	cargon	;en operando 1
 	pulx
 	pulx
 	jmp	lcarga	
@@ -88,7 +88,7 @@ norecur	ldaa	oper	; Si no hay operador, cargo el
 	inc	negop2	; Si no se cumplio nada de lo anterior,
 	ldaa	#$2D	;avisamos que el operando 2 es negativo
 	staa	mdis	;y cargamos el "-" en el display
-*inc	digop	; Decrementamos en uno los digitos disponibles
+	inc	digop	; Decrementamos en uno los digitos disponibles
 	jmp	lcarga
 	
 	
@@ -96,7 +96,7 @@ norecur	ldaa	oper	; Si no hay operador, cargo el
 nega	ldaa	negop1	; Si ya fue negado el operando 1,
 	bne	noM	;uso el '-' como operador aunque op1 sea 0
 	inc	negop1	; Avisamos que el operando 1 es negativo
-*inc	digop	; Decrementamos en uno los digitos disponibles
+	inc	digop	; Decrementamos en uno los digitos disponibles
 	ldaa	#$2D	;y cargamos el "-" en el display
 	staa	mdis
 	jmp	lcarga
@@ -114,8 +114,8 @@ noM	ldaa	0,y
 	clc	recur ; Borro la recursividad
 	jmp	coper
 
-sal10	ldaa	oper ;verifico que no haya operador cargado
-	bne	lcarga ; Si hay operador, no cargo el carácter presionado
+sal10	ldaa	oper 	;verifico que no haya operador cargado
+	bne	lcarga 	; Si hay operador, no cargo el carácter presionado
 coper	ldx	#mdis
 	pshx
 	ldaa	0,y
@@ -125,18 +125,20 @@ coper	ldx	#mdis
 	pulx
 	jmp	lcarga
 	
-err	ldx	#mdis
+	
+	
+err	ldx	#mdis	
 	pshx
 	ldy	#I_STR
 	ldx	#negop1
 	ldab	#NCLC
-	jsr	error
-	pulx		;Compensamos el pasaje de variables por stack
+	jsr	error	; Llamo a la subrutina representa el estado error
+	pulx		; Compensamos el pasaje de variables por stack
 	
-lcarga	ldx	#mdis
-	jsr	display
-	jsr	delay
-nocarga	jmp	mloop 
+lcarga	ldx	#mdis	
+	jsr	display	; Refrezco el display
+	jsr	delay	; Ejecuto delay para antirebote
+nocarga	jmp	mloop 	; Vuelvo al inicio del programa
 
 ****************************************************************************************************************
 	rseg	VARS

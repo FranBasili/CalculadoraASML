@@ -5,8 +5,10 @@ $const.def
 ****************************************************************************************************************
 * CALCULO
 *	Si se pulso F ('=') en el teclado llama a esta subrutina que se encarga de ver cuales son los operandos 
-*	 y la operación y realizarla.
-* Parametros recibidos: Inicio de número Binary por IX e Inicio de result por IY
+*	y la operación y realizarla.
+* Parametros recibidos: 
+* Inicio de número Binary por IX 
+* Inicio de result por IY
 * Parametros entregados: Resultado de la opeación en la variable en la memoria definida como result
 ****************************************************************************************************************
 	rseg	CODE

@@ -93,7 +93,7 @@ fcargon puly
 
 ****************************************************************************************************************
 * CARGOOP
-*	
+* 	Carga el operador en la memoria correspondiente y en el display.	
 * Parametros recibidos: 
 *   Por IX: Direccion de la memoria donde guardo el contador de digitos.
 *   Por IY: Direccion de la memoria donde guardo el operador. 
