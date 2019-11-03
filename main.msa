@@ -107,11 +107,12 @@ noM	ldaa	0,y
 	beq	nocarga	; Se apretó un operando?
 	ldaa	recur 
 	beq	sal10 ; Si no estoy en modo recursivo, analizo si tengo operador
+	clr	negop2
 	ldx	#op2
 	clr	0,x	;Borro el MSB del operando 2
 	clr	1,x	;Borro el LSB del operando 2
 	clr	digop
-	clc	recur ; Borro la recursividad
+	clr	recur ; Borro la recursividad
 	jmp	coper
 
 sal10	ldaa	oper 	;verifico que no haya operador cargado
