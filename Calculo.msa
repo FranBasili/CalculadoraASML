@@ -64,13 +64,15 @@ suma	equ	*
 mula	equ	*
 	pshy		;guardamos IX para no perder la dirección donde se guarda el resultado
 	ldy	4,x	;cargamos el segundo operando y si es cero que cargue cero en el resulatdo
-	beq	cero		
+	beq	cero
+	ldd	#0
 mult	addd	0,x
-	ldd	0,x
 	dey
 	bne	mult
 	
-cero	puly
+	bra	en
+cero	ldd	#0
+en	puly
 	std	0,y
 	clc		;indico que la cuenta esta bien
 	jmp	fin
