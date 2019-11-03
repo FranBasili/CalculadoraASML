@@ -62,8 +62,16 @@ suma	equ	*
 	
 ****************************************************************************************************************	
 mula	equ	*
-	ldd	#1234	;un indicador para saber que se invoco a la multiplicación
-	std	0,y	;HAY QUE HACER ESTA SUBRUTINA!!!
+	pshy		;guardamos IX para no perder la dirección donde se guarda el resultado
+	ldy	4,x	;cargamos el segundo operando y si es cero que cargue cero en el resulatdo
+	beq	cero		
+mult	addd	0,x
+	ldd	0,x
+	dey
+	bne	mult
+	
+cero	puly
+	std	0,y
 	clc		;indico que la cuenta esta bien
 	jmp	fin
 ****************************************************************************************************************	
