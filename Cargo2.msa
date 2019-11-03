@@ -31,30 +31,29 @@ cargon	equ *
 	jmp	fcargon
 	
 cargo	tsx
-	ldx	2,x	; Apunto IX al bye de negatividad del operando
+	ldx	2,x	; Apunto IX al byte de negatividad del operando
 	ldaa	0,x	; Cargo el byte de negatividad
 	bne	nego	; Si el numero es negativo, salto
 	
 	ldd	1,x     ; Cargo en AccB el valor a sumar
-	ldaa	#10     ; Cargo para multiplicar por 10
-	mul
+	ldy	#10	; Cargo en IY la base del sistema numerico
 	jmp	saltoC1
 
 
 nego	inc	negat
 	ldy	#10
-	ldd	1,x       ; Cargo en IY el valor que ya tenía
-	coma
+	ldd	1,x	; Cargo en Accd el valor que ya tenía
+	coma		; Lo complemento a 2
 	comb
 	addd	#1
-	std	mem
-	clra
+saltoC1	std	mem	; Guardo en una memoria ese valor
+	clra		; Limpio AccD
 	clrb
-multi	addd	mem
-	dey
-	bne	multi
+multi	addd	mem	; Sumo el valor que ya tenía tantas veces
+	dey		;como indique la base numerica en la que 
+	bne	multi	; estoy.
 	
-saltoC1	tsx	
+	tsx	
 	ldy	0,x	; Apunto IY a la dir donde esta el nuevo caracter
 	xgdx		; Paso la multiplicacion que tenia en Accd a IX
 	ldab	0,y	; Cargo el nuevo caracter
