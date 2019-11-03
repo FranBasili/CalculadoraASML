@@ -6,7 +6,7 @@
 * Parametros recibidos:  
 *    Inicio del arreglo de numeros por IX  
 *    Inicio de mdis por IY
-* Parametros entregados: Numero en bcd en la memoria pedida por IY
+* Parametros entregados: Numero en ASCII en la memoria pedida por IY
 ****************************************************************************************************************
 	rseg	CODE
 btasci	equ	*
