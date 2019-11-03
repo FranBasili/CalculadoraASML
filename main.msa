@@ -6,36 +6,36 @@
 	extern	initdis,outchar,keypad,init,display,cargon,calculo,delay,cargoop,btasci,error
 $const.def
 	rseg	CODE
-	lds 	#st_ini
+	lds 	#st_ini	; Inicializo el display
 	jsr	initdis
 	ldx	#negop1
 	ldaa	#NCLC	
-	jsr	init
+	jsr	init	; Reseteo las memorias
 	ldaa	#$30
 	ldx	#mdis
 	staa	3,x
-	jsr 	display	
+	jsr 	display	; Refrezco el display
 mloop	ldy	#I_STR
-	jsr	keypad
+	jsr	keypad	; Reviso se presionó alguna tecla
 	
-	bcs	apreto
-	jmp	nocarga
+	bcs	apreto	; Si se apretó algo sigo analizando
+	jmp	nocarga	; Si no se apretó nada, sigo analizando hasta que se aprete algo
 	
 apreto	ldaa	0,y
-	cmpa	#$43	;Se apretó Clear?
-	bne	noC
-	ldx	#negop1
-	ldaa	#NCLC	
+	cmpa	#$43	; Analizo si se apretó el clear
+	bne	noC	; Si no se apretó clear, sigo analizando que se apreto  
+	ldx	#negop1	; Si se apretó clear, borro todas las memorias y muestro
+	ldaa	#NCLC	; "0" en el display
 	jsr	init
 	ldaa	#$30
 	ldx	#mdis
 	staa	3,x
-	jmp	lcarga
+	jmp	lcarga	; Una vez terminado, vuelvo a esperar que presionen algo.
 	
 noC	ldaa	0,y
-	cmpa	#$52	;Se apretó "="?
+	cmpa	#$52	; Analizo si se apretó "R"
 	bne	noR
-	ldaa	oper
+	ldaa	oper	; S
 	bne	sigo
 	jmp	nocarga
 	
