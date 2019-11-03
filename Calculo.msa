@@ -70,7 +70,6 @@ mula	equ	*
 	ldy	4,x	;cargamos el segundo operando y si es cero que cargue cero en el resulatdo
 	beq	cero
 mult	addd	0,x	;la primera vez se carga el número, las demas suma sucesivamente (Producto de números)
-
 	dey		;decrementamos el segundo operando para saber cuantas veces sumamos AccD
 	bne	mult		
 cero	puly
