@@ -1,5 +1,6 @@
 	p68h11
-	public	btasci
+	public	btasci,error
+	extern	keypad,init,display,delay
 ****************************************************************************************************************
 * 		Binary to ASCII
 * Transforma un numero en bcd a binario
@@ -48,5 +49,67 @@ cargo	ldx	#10
 	pula	
 	pulb
 	rts
+
+
+**********************************************************************************************
+*ERROR
+* Pone una "E" en el display y "congela" la calculadora hasta que se aprete clear y se borren
+*todas las memorias.
+*Parametros recibidos:
+*	Primer dirección del arreglo numerico por IX
+*	Origen del arreglo del teclado por IY
+*	Cant memorias a borrar por AccB
+*	Memorias que se muestran en el display por stack
+*Parametros entregados: Ninguno
+**********************************************************************************************
+error	equ	*
+	psha		; Programación defensiva
+	pshb
+	pshx
+	pshy
+	
+	tsx		; Creo un framepointer
+	ldx	8,x	; Cargo en IX la dir de  mdis
+	ldaa	#$45	; Cargo "E" en la primer memoria del display
+	staa	0,x	
+	ldab	#3
+	inx
+erase	clr	0,x	; Borro los tres ultimos digitos del display
+	inx
+	decb
+	bne	erase
+	
+	tsx		; Creo un framepointer
+	ldx	8,x	; Cargo en IX la dir de  mdis
+	jsr	display	; Refresco el display
+	
+waitclr	tsx
+	ldy	0,x	; Si entre en error, lo mantengo en el bucle
+	jsr	keypad	;hasta que se aprete clear y se borren todas 
+	ldaa	0,y	;las memorias
+	cmpa	#$43
+	bne	waitclr
+	
+	tsx		; Creo un framepointer
+	ldaa	4,x	; Cargo en Acca la cant de memorias a borrar
+	ldx	2,x	; Cargo la dirección del inicio del arreglo numerico en IX
+	jsr	init	; Borro memorias
+	
+	ldaa	#$30	; Cargo "0" en Acca
+	tsx		; Creo un framepointer
+	ldx	8,x	; Cargo en IX la dir. de mdis
+	staa	3,x	; Guardo el "0" en el ult digito del display
+	
+	puly		; Programación defensiva
+	pulx
+	pulb
+	pula
+	rts		; Retorno a la subrutina sin haber modificado ningún registro no deseado
+	
+**********************************************************************************************
+**********************************************************************************************	
+
+
+
 
 	END
