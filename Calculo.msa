@@ -46,6 +46,8 @@ resta	equ	*
 	subd	4,x	;4,x es el segundo operando en variables
 	cpd	#MIN	;comparo con el máximo valor de 3 digitos
 	bmi	errcal
+	cpd	#MAX	;comparo con el máximo valor de 3 digitos
+	bpl	errcal
 	std	0,y
 	clc		;indico que la cuenta esta bien
 	jmp	fin
@@ -56,6 +58,8 @@ suma	equ	*
 	addd	4,x	;4,x es el segundo operando en variables
 	cpd	#MAX	;comparo con el máximo valor de 3 digitos
 	bpl	errcal
+	cpd	#MIN	;comparo con el máximo valor de 3 digitos
+	bmi	errcal
 	std	0,y
 	clc		;indico que la cuenta esta bien
 	jmp	fin
@@ -67,10 +71,6 @@ mula	equ	*
 	ldy	4,x	;cargamos el segundo operando y si es cero que cargue cero en el resulatdo
 	beq	cero
 mult	addd	0,x	;la primera vez se carga el número, las demas suma sucesivamente (Producto de números)
-	cpd	#MAX	;comparo con el máximo valor de 3 digitos
-	bpl	errcal
-	cpd	#MIN	;comparo con el máximo valor de 3 digitos
-	bmi	errcal
 	dey		;decrementamos el segundo operando para saber cuantas veces sumamos AccD
 	bne	mult		
 cero	puly
