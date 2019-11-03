@@ -46,7 +46,7 @@ resta	equ	*
 	subd	4,x	;4,x es el segundo operando en variables
 	cpd	#MIN	;comparo con el máximo valor de 3 digitos
 	bmi	errcal
-	cpd	#MAX	;comparo con el máximo valor de 3 digitos
+	cpd	#MAX	;comparo con el máximo valor de 4 digitos
 	bpl	errcal
 	std	0,y
 	clc		;indico que la cuenta esta bien
@@ -56,7 +56,7 @@ resta	equ	*
 suma	equ	*
 	ldd	0,x
 	addd	4,x	;4,x es el segundo operando en variables
-	cpd	#MAX	;comparo con el máximo valor de 3 digitos
+	cpd	#MAX	;comparo con el máximo valor de 4 digitos
 	bpl	errcal
 	cpd	#MIN	;comparo con el máximo valor de 3 digitos
 	bmi	errcal
