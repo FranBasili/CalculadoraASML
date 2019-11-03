@@ -63,16 +63,17 @@ suma	equ	*
 ****************************************************************************************************************	
 mula	equ	*
 	pshy		;guardamos IX para no perder la dirección donde se guarda el resultado
+	ldd	#0
 	ldy	4,x	;cargamos el segundo operando y si es cero que cargue cero en el resulatdo
 	beq	cero
-	ldd	#0
-mult	addd	0,x
-	dey
-	bne	mult
-	
-	bra	en
-cero	ldd	#0
-en	puly
+mult	addd	0,x	;la primera vez se carga el número, las demas suma sucesivamente (Producto de números)
+	cpd	#MAX	;comparo con el máximo valor de 3 digitos
+	bpl	errcal
+	cpd	#MIN	;comparo con el máximo valor de 3 digitos
+	bmi	errcal
+	dey		;decrementamos el segundo operando para saber cuantas veces sumamos AccD
+	bne	mult		
+cero	puly
 	std	0,y
 	clc		;indico que la cuenta esta bien
 	jmp	fin
