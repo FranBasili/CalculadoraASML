@@ -62,12 +62,23 @@ noR	ldaa	0,y
 	ldx	#mdis
 	pshx
 	ldaa	oper
-	bne	cargon2	; Si hay operador, utilizo cargon 
-	ldx	#negop1	;en operando 2
+	bne	cargon2	; Si hay operador, verifico que no
+	
+	ldaa	0,y
+	bne	nocero1
+	ldx	op1	; se este apretando 0 y a su vez
+	beq	ceroizq	; el operando sea nulo.
+nocero1	ldx	#negop1	; y despues uso cargon para el operando 1
 	jmp	saltoM1	
-cargon2	ldx	#negop2	; Si no hay operador, utilizo cargon 
+	
+cargon2	ldaa	0,y
+	bne	nocero2
+	ldx	op2	; Si no hay operador, verifico que no
+	beq	ceroizq	;se este apretando 0 y a su vez el operando
+nocero2	ldx	#negop2	;sea nulo y despues uso cargon para el operando 2
+
 saltoM1	jsr	cargon	;en operando 1
-	pulx
+ceroizq	pulx
 	pulx
 	jmp	lcarga	
 
