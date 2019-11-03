@@ -71,10 +71,15 @@ mula	equ	*
 	ldy	4,x	;cargamos el segundo operando y si es cero que cargue cero en el resulatdo
 	beq	cero
 mult	addd	0,x	;la primera vez se carga el número, las demas suma sucesivamente (Producto de números)
+
 	dey		;decrementamos el segundo operando para saber cuantas veces sumamos AccD
 	bne	mult		
 cero	puly
 	std	0,y
+	cpd	#MAX	;comparo con el máximo valor de 4 digitos
+	bpl	errcal
+	cpd	#MIN	;comparo con el máximo valor de 3 digitos
+	bmi	errcal
 	clc		;indico que la cuenta esta bien
 	jmp	fin
 ****************************************************************************************************************	
