@@ -78,7 +78,14 @@ cargon2	ldaa	0,y
 nocero2	ldx	#negop2	;sea nulo y despues uso cargon para el operando 2
 
 saltoM1	jsr	cargon	;en operando 1
-ceroizq	pulx
+	jmp	cierro
+	
+ceroizq	ldx	#mdis
+	ldaa	#$30
+	staa	3,x
+	clr	0,x
+	
+cierro	pulx
 	pulx
 	jmp	lcarga	
 
