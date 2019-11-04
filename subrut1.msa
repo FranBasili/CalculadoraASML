@@ -90,10 +90,10 @@ display	equ	*
 *Parametros entregados: Ninguno
 **********************************************************************************************
 error	equ	*
-	psha		; Programación defensiva
+	psha		
 	pshb
 	pshx
-	pshy
+	pshy		; Programación defensiva
 	
 	tsx		; Creo un framepointer
 	ldx	8,x	; Cargo en IX la dir de  mdis

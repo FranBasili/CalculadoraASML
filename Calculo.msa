@@ -69,19 +69,30 @@ mula	equ	*
 	ldd	#0
 	ldy	4,x	;cargamos el segundo operando y si es cero que cargue cero en el resulatdo
 	beq	cero
+	bpl	posit
+	xgdy		;Intercambiamos para poder hacer el complemento a dos de IY
+	coma	
+	comb
+	addd	#1	;Complemento a dos de AccD
+	xgdy
+posit	nop
 mult	addd	0,x	;la primera vez se carga el número, las demas suma sucesivamente (Producto de números)
+	cpd	#MAX	;comparo con el máximo valor de 4 digitos
+	bpl	errcalm
+	cpd	#MIN	;comparo con el máximo valor de 3 digitos
+	bmi	errcalm
 	dey		;decrementamos el segundo operando para saber cuantas veces sumamos AccD
 	bne	mult		
 cero	puly
+***************************************************
+Hacer el complemento a dos del resultado de si 
+el segundo operando es negativo!!!!
+***************************************************
 	std	0,y
-	cpd	#MAX	;comparo con el máximo valor de 4 digitos
-	bpl	errcal
-	cpd	#MIN	;comparo con el máximo valor de 3 digitos
-	bmi	errcal
 	clc		;indico que la cuenta esta bien
 	jmp	fin
 ****************************************************************************************************************	
-
+errcalm	puly
 errcal	sec		;indico por el carry (=1) que hay un error en la cuenta
 fin	puly		;programación defensiva
 	pulx
