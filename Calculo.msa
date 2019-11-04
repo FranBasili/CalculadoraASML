@@ -68,30 +68,41 @@ mula	equ	*
 	pshy		;guardamos IX para no perder la dirección donde se guarda el resultado
 	ldd	#0
 	ldy	4,x	;cargamos el segundo operando y si es cero que cargue cero en el resulatdo
-	beq	cero
-	bpl	posit
-	xgdy		;Intercambiamos para poder hacer el complemento a dos de IY
-	coma	
-	comb
-	addd	#1	;Complemento a dos de AccD
-	xgdy
-posit	nop
+	beq	fin
+	bmi	negab
+	
 mult	addd	0,x	;la primera vez se carga el número, las demas suma sucesivamente (Producto de números)
 	cpd	#MAX	;comparo con el máximo valor de 4 digitos
 	bpl	errcalm
 	cpd	#MIN	;comparo con el máximo valor de 3 digitos
 	bmi	errcalm
 	dey		;decrementamos el segundo operando para saber cuantas veces sumamos AccD
-	bne	mult		
-cero	puly
-***************************************************
-Hacer el complemento a dos del resultado de si 
-el segundo operando es negativo!!!!
-***************************************************
+	bne	mult
+	puly
 	std	0,y
 	clc		;indico que la cuenta esta bien
 	jmp	fin
-****************************************************************************************************************	
+	
+negab	xgdy		;Intercambiamos para poder hacer el complemento a dos de IY
+	coma	
+	comb
+	addd	#1	;Complemento a dos de AccD
+	xgdy
+multn 	addd	0,x	;la primera vez se carga el número, las demas suma sucesivamente (Producto de números)
+	cpd	#MAX	;comparo con el máximo valor de 4 digitos
+	bpl	errcalm
+	cpd	#MIN	;comparo con el máximo valor de 3 digitos
+	bmi	errcalm
+	dey		;decrementamos el segundo operando para saber cuantas veces sumamos AccD
+	bne	multn		
+	coma	
+	comb
+	addd	#1	;Complemento a dos de AccD
+	puly
+	std	0,y
+	clc		;indico que la cuenta esta bien
+	jmp	fin
+	
 errcalm	puly
 errcal	sec		;indico por el carry (=1) que hay un error en la cuenta
 fin	puly		;programación defensiva
