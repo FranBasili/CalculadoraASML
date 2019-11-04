@@ -96,7 +96,7 @@ error	equ	*
 	pshy		; Programación defensiva
 	
 	tsx		; Creo un framepointer
-	ldx	8,x	; Cargo en IX la dir de  mdis
+	ldx	8,x	; Cargo en IX la dir de mdis
 	ldaa	#$45	; Cargo "E" en la primer memoria del display
 	staa	0,x	
 	ldab	#3
