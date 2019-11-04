@@ -62,7 +62,7 @@ noR	ldaa	0,y
 	ldx	#mdis
 	pshx
 	ldaa	oper
-	bne	cargon2	; Si hay operador, verifico que no
+	bne	cargon2	; Si hay operador, paso a cargar el operando 2
 	
 	ldaa	0,y
 	bne	nocero1
