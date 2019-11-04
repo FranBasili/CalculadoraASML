@@ -94,7 +94,7 @@ noN 	ldaa	0,y
 	jmp	noM
 	
 norecur	ldaa	oper	; Si no hay operador, cargo el 
-	beq	noM	; "-" como operador
+	beq	menop	; "-" como operador
 	
 	inc	negop2	; Si no se cumplio nada de lo anterior,
 	ldaa	#$2D	;avisamos que el operando 2 es negativo
@@ -118,7 +118,7 @@ noM	ldaa	0,y
 	beq	nocarga	; Se apretó un operando?
 	ldaa	recur 
 	beq	sal10 ; Si no estoy en modo recursivo, analizo si tengo operador
-	clr	negop2
+menop	clr	negop2
 	ldx	#op2
 	clr	0,x	;Borro el MSB del operando 2
 	clr	1,x	;Borro el LSB del operando 2
