@@ -35,7 +35,7 @@ apreto	ldaa	0,y
 noC	ldaa	0,y
 	cmpa	#$52	; Analizo si se apretó "R"
 	bne	noR
-	ldaa	oper	; Si no hay operando, ignoro que se haya apretado "R"
+	ldaa	oper	; Si no hay operador, ignoro que se haya apretado "R"
 	bne	sigo
 	jmp	nocarga
 	
@@ -43,7 +43,7 @@ sigo	ldx	#op1	; Si hay operando, salto a la subrutina
 	ldy	#result	; que calcula el resultado de la cuenta.
 	jsr	calculo
 	bcc	noerror	; Si la subrutina, me dice que hay error,
-	jmp	err	;salto al estado "error"
+	jmp	error	;salto al estado "error"
 	
 noerror	ldx	result	; Si no hay error:
 	stx	op1	; Cargo el resultado en el operando 1
