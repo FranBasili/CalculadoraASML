@@ -27,7 +27,7 @@ cargon	equ *
 	ldx	10,x	; Apunto IX a la memoria que cuenta los digitos
 	ldaa	0,x	; Cargo el contador de digitos
 	cmpa 	#digitos    
-	blo	cargo  ; Si ya tenía 3 digitos no sigo cargando
+	blo	cargo  ; Si ya tenía 4 digitos no sigo cargando
 	jmp	fcargon
 	
 cargo	tsx
@@ -35,7 +35,7 @@ cargo	tsx
 	ldaa	0,x	; Cargo el byte de negatividad
 	bne	nego	; Si el numero es negativo, salto
 	
-	ldd	1,x     ; Cargo en AccB el valor a sumar
+	ldd	1,x     ; Cargo en AccD el valor a sumar
 	ldy	#10	; Cargo en IY la base del sistema numerico
 	jmp	saltoC1
 
