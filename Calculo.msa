@@ -85,8 +85,8 @@ mult	addd	0,x	;la primera vez se carga el número, las demas suma sucesivamente 
 	bne	mult		
 cero	puly
 ***************************************************
-Hacer el complemento a dos del resultado de si 
-el segundo operando es negativo!!!!
+*Hacer el complemento a dos del resultado de si 
+*el segundo operando es negativo!!!!
 ***************************************************
 	std	0,y
 	clc		;indico que la cuenta esta bien
