@@ -33,10 +33,10 @@ posit	ldd	0,x
 	pshx		;uso una variable temporal que estará en el stack
 cargo	ldx	#10	
 	idiv
-	cpx	#0
-	beq	nonum
 	addb	#$30	;corrección de número decimal a ASCII		
 	stab	3,y	;lo cargo en mdis para luego ser mostrado en el display
+	cpx	#0
+	beq	nonum
 	dey		;recorro los elementos del display
 	xgdx		;intercambio para no perder lo que se seguira dividiendo
 	pulx	
@@ -50,8 +50,6 @@ cargo	ldx	#10
 *
 **********************************************************************************************
 nonum	pulx		;contador de divisiones (variable temporal)
-	addb	#$30	;corrección de número decimal a ASCII		
-	stab	3,y	;lo cargo en mdis para luego ser mostrado en el display
 cargo2	dey		;recorro los elementos del display
 	clrb		;borro el elemento del display
 	ldab 	3,y	
