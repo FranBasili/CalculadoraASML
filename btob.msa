@@ -25,11 +25,11 @@ btasci	equ	*
 	coma	
 	comb
 	addd	#1	;complemento a dos de AccD
-	ldx	#3	;cantidad de numeros a convertir (como es negativo es uno menos)
+	ldx	#DIGITOS-1	;cantidad de numeros a convertir (como es negativo es uno menos)
 	pshx
 	bra 	cargo
 posit	ldd	0,x
-	ldx	#4	;cantidad de numeros a convertir
+	ldx	#DIGITOS	;cantidad de numeros a convertir
 	pshx		;uso una variable temporal que estará en el stack
 cargo	ldx	#10	
 	idiv
