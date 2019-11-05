@@ -15,9 +15,10 @@ btasci	equ	*
 	pshx
 	pshy		;programación defensiva
 	
-	ldaa	0,x	
+	ldd	0,x
+	beq	cero
 	lsla
-	bcc	posit	;en estas tres primeras lineas verifico si el númmero es negativo
+	bcc	posit	;en estas cuatro primeras lineas verifico si el númmero es negativo o cero
 	ldab	#$2D	;cargo el sibolo negativo -
 	stab	0,y
 	ldd	0,x	;cargo el numero a convertir
@@ -33,8 +34,10 @@ posit	ldd	0,x
 	pshx		;uso una variable temporal que estara en el stack
 cargo	ldx	#10	
 	idiv
+	addd	#0
+	beq	dicero
 	addb	#$30	;corrección de número decimal a ASCII		
-	stab	3,y	;lo cargo en mdis para luego ser mostrado en el display
+dicero	stab	3,y	;lo cargo en mdis para luego ser mostrado en el display
 	dey		;recorro los elementos del display
 	xgdx		;intercambio para no perder lo que se seguira dividiendo
 	pulx	
@@ -42,7 +45,9 @@ cargo	ldx	#10
 	pshx
 	bne	cargo	;si el contador es cero es porque cargo todos los elementos del display
 	pulx		;corrección de SP
-	
+cero	std	0,y	;en las últimos tres elementos (de izquierda a derecha)no se ve nada y solo aparece 
+	ldd	#$0030	; un cero en la el primer elemento del display.
+	std	2,y	
 	puly		;programación defensiva
 	pulx
 	pula	
