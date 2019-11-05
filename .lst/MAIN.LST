@@ -1,0 +1,238 @@
+################################################################################
+#                                                                              #
+#    Micro Series 6801 Assembler V2.00/DOS              05/Nov/19  01:10:10    #
+#                                                                              #
+#       Source   =   main.msa                                                  #
+#       List     =   main.lst                                                  #
+#       Object   =   main.r07                                                  #
+#       Options  =                                                             #
+#                                                                              #
+#                                               (c) Copyright IAR Systems 1990 #
+################################################################################
+
+
+    1                 ****************************************************************************************************************
+    2                 *                                               Calculadora                                             Grupo: 7
+    3                 *       Este programa ...
+    4                 ****************************************************************************************************************
+    5  0000                   p68h11          ;declara el modelo de microprocesador utilizado.
+    6  0000                   extern  initdis,outchar,keypad,init,display,cargon,calculo,delay,cargoop,btasci,error,zcleaner
+    7                 $const.def
+    8                 *********************** Ports ****************************
+    9  1007           DDRC    equ     $1007 ;data direction register for C
+   10  1002           PIOC    equ     $1002 ;for strobe B assertion change
+   11  1005           PORTCL  equ     $1005 ;port C latched
+   12  1004           PORTB   equ     $1004 ;port B
+   13  1003           PORTC   equ     $1003 ;rows
+   14                 
+   15                 *************** Cols and Row Ports ***********************
+   16  1003           ROWS    equ     PORTC ;outputs
+   17  1005           COLS    equ     PORTCL ;inputs
+   18                 
+   19                 ******************* Row Masks ****************************
+   20  000E           FIL0    equ     00001110b ;mascaras para manejo de filas
+   21  000D           FIL1    equ     00001101b
+   22  000B           FIL2    equ     00001011b
+   23  0007           FIL3    equ     00000111b
+   24                 **********************************************************
+   25                 *************Caracteristicas de Hardware******************
+   26  0004           DIGITOS equ     4
+   27  2710           MAX     equ     10000
+   28  FC18           MIN     equ     -1000
+   29                 **********************************************************
+   30  0000                   rseg    CODE
+   31  0000 8E004F            lds     #st_ini ; Inicializo el display
+   32  0003 BD0000            jsr     initdis
+   33  0006 CE0000            ldx     #negop1
+   34  0009 860F              ldaa    #NCLC   
+   35  000B BD0000            jsr     init    ; Reseteo las memorias
+   36  000E 8630              ldaa    #$30
+   37  0010 CE0007            ldx     #mdis
+   38  0013 A703              staa    3,x
+   39  0015 BD0000            jsr     display ; Refrezco el display
+   40  0018 18CE0000  mloop   ldy     #I_STR
+   41  001C BD0000            jsr     keypad  ; Reviso se presionó alguna tecla
+   42                         
+   43  001F 2503              bcs     apreto  ; Si se apretó algo sigo analizando
+   44  0021 7E0146            jmp     nocarga ; Si no se apretó nada, sigo analizando hasta que se aprete algo
+   45                         
+   46  0024 18A600    apreto  ldaa    0,y
+   47  0027 8143              cmpa    #$43    ; Analizo si se apretó el clear
+   48  0029 2612              bne     noC     ; Si no se apretó clear, sigo analizando que se apreto  
+   49  002B CE0000            ldx     #negop1 ; Si se apretó clear, borro todas las memorias y muestro
+   50  002E 860F              ldaa    #NCLC   ; "0" en el display
+   51  0030 BD0000            jsr     init
+   52  0033 8630              ldaa    #$30
+   53  0035 CE0007            ldx     #mdis
+   54  0038 A703              staa    3,x
+   55  003A 7E013A            jmp     lcarga  ; Una vez terminado, vuelvo a esperar que presionen algo.
+   56                         
+   57  003D 18A600    noC     ldaa    0,y
+   58  0040 8152              cmpa    #$52    ; Analizo si se apretó "R"
+   59  0042 262F              bne     noR
+   60  0044 B60003            ldaa    oper    ; Si no hay operador, ignoro que se haya apretado "R"
+   61  0047 2603              bne     sigo
+   62  0049 7E0146            jmp     nocarga
+   63                         
+   64  004C CE0001    sigo    ldx     #op1    ; Si hay operando, salto a la subrutina 
+   65  004F 18CE000C          ldy     #result ; que calcula el resultado de la cuenta.
+   66  0053 BD0000            jsr     calculo
+   67  0056 2403              bcc     noerror ; Si la subrutina, me dice que hay error,
+   68  0058 7E0129            jmp     err     ;salto al estado "error"
+   69                         
+   70  005B FE000C    noerror ldx     result  ; Si no hay error:
+   71  005E FF0001            stx     op1     ; Cargo el resultado en el operando 1
+   72  0061 CE000C            ldx     #result
+   73  0064 18CE0007          ldy     #mdis   ; Salto a la subrutina que me muestra
+   74  0068 BD0000            jsr     btasci  ; el resultado en el display 
+   75  006B 8601              ldaa    #1      ; Aviso por recur, que ya realice una
+   76  006D B7000E            staa    recur   ;operación
+   77  0070 7E013A            jmp     lcarga
+   78                         
+   79  0073 18A600    noR     ldaa    0,y
+   80  0076 810A              cmpa    #10
+   81  0078 243E              bhs     noN     ; Verifico si se apretó un numero
+   82  007A CE000B            ldx     #digop  
+   83  007D 3C                pshx
+   84  007E CE0007            ldx     #mdis
+   85  0081 3C                pshx
+   86  0082 B60003            ldaa    oper
+   87  0085 2610              bne     cargon2 ; Si hay operador, paso a cargar el operando 2
+   88                         
+   89  0087 18A600            ldaa    0,y
+   90  008A 2605              bne     nocero1 ; Si no hay operador, verifico que no
+   91  008C FE0001            ldx     op1     ; se este apretando 0 y a su vez
+   92  008F 2719              beq     ceroizq ; el operando sea nulo.
+   93  0091 CE0000    nocero1 ldx     #negop1 ; Si no sucede lo anterior, uso cargon para operando 1
+   94  0094 7E00A4            jmp     saltoM1 
+   95                         
+   96  0097 18A600    cargon2 ldaa    0,y
+   97  009A 2605              bne     nocero2
+   98  009C FE0005            ldx     op2     ; Si no hay operador, verifico que no
+   99  009F 2709              beq     ceroizq ;se este apretando 0 y a su vez el operando
+  100  00A1 CE0004    nocero2 ldx     #negop2 ;Si no sucede lo anterior, uso cargon para operando 2
+  101                 
+  102  00A4 BD0000    saltoM1 jsr     cargon  ;en operando 1
+  103  00A7 7E00B3            jmp     cierro
+  104                         
+  105  00AA CE0007    ceroizq ldx     #mdis   
+  106  00AD 8630              ldaa    #$30
+  107  00AF A703              staa    3,x     ; En caso de no haber operando 2 y que se aprete el 0
+  108  00B1 6F00              clr     0,x     ;Cargo un cero en el display y borro el operador.
+  109                         
+  110  00B3 38        cierro  pulx
+  111  00B4 38                pulx
+  112  00B5 7E013A            jmp     lcarga  
+  113                 
+  114                 
+  115  00B8 18A600    noN     ldaa    0,y
+  116  00BB 812D              cmpa    #$2D    
+  117  00BD 2633              bne     noM     ; Se apretó "-"?
+  118                         
+  119  00BF FE0001            ldx     op1     ; Si todavía no hay operando 1
+  120  00C2 271B              beq     nega    ; Salto a nega1
+  121  00C4 B6000E            ldaa    recur
+  122  00C7 2703              beq     norecur ; Si estoy en modo recursivo, acepto modificar el operador
+  123  00C9 7E00F2            jmp     noM
+  124                         
+  125  00CC B60003    norecur ldaa    oper    ; Si no hay operador, cargo el 
+  126  00CF 272B              beq     menop   ; "-" como operador
+  127                         
+  128  00D1 7C0004            inc     negop2  ; Si no se cumplio nada de lo anterior,
+  129  00D4 862D              ldaa    #$2D    ;avisamos que el operando 2 es negativo
+  130  00D6 B70007            staa    mdis    ;y cargamos el "-" en el display
+  131  00D9 7C000B            inc     digop   ; Decrementamos en uno los digitos disponibles
+  132  00DC 7E013A            jmp     lcarga
+  133                         
+  134                         
+  135                 
+  136  00DF B60000    nega    ldaa    negop1  ; Si ya fue negado el operando 1,
+  137  00E2 260E              bne     noM     ;uso el '-' como operador aunque op1 sea 0
+  138  00E4 7C0000            inc     negop1  ; Avisamos que el operando 1 es negativo
+  139  00E7 7C000B            inc     digop   ; Decrementamos en uno los digitos disponibles
+  140  00EA 862D              ldaa    #$2D    ;y cargamos el "-" en el display
+  141  00EC B70007            staa    mdis
+  142  00EF 7E013A            jmp     lcarga
+  143                 
+  144                 
+  145                 
+  146  00F2 18A600    noM     ldaa    0,y
+  147  00F5 274F              beq     nocarga ; Se apretó un operando?
+  148  00F7 B6000E            ldaa    recur 
+  149  00FA 2713              beq     sal10 ; Si no estoy en modo recursivo, analizo si tengo operador
+  150  00FC 7F0004    menop   clr     negop2
+  151  00FF CE0005            ldx     #op2
+  152  0102 6F00              clr     0,x     ;Borro el MSB del operando 2
+  153  0104 6F01              clr     1,x     ;Borro el LSB del operando 2
+  154  0106 7F000B            clr     digop
+  155  0109 7F000E            clr     recur ; Borro la recursividad
+  156  010C 7E0114            jmp     coper
+  157                 
+  158  010F B60003    sal10   ldaa    oper    ;verifico que no haya operador cargado
+  159  0112 2626              bne     lcarga  ; Si hay operador, no cargo el carácter presionado
+  160  0114 CE0007    coper   ldx     #mdis
+  161  0117 3C                pshx
+  162  0118 18A600            ldaa    0,y
+  163  011B CE000B            ldx     #digop
+  164  011E 18CE0003          ldy     #oper
+  165  0122 BD0000            jsr     cargoop ; Cargo el operador
+  166  0125 38                pulx
+  167  0126 7E013A            jmp     lcarga
+  168                         
+  169                         
+  170                         
+  171  0129 CE0007    err     ldx     #mdis   
+  172  012C 3C                pshx
+  173  012D 18CE0000          ldy     #I_STR
+  174  0131 CE0000            ldx     #negop1
+  175  0134 C60F              ldab    #NCLC
+  176  0136 BD0000            jsr     error   ; Llamo a la subrutina representa el estado error
+  177  0139 38                pulx            ; Compensamos el pasaje de variables por stack
+  178                         
+  179  013A CE0007    lcarga  ldx     #mdis   
+  180  013D BD0000            jsr     zcleaner ; Borro los ceros sin valor del display
+  181  0140 BD0000            jsr     display ; Refrezco el display
+  182  0143 BD0000            jsr     delay   ; Ejecuto delay para antirebote
+  183  0146 7E0018    nocarga jmp     mloop   ; Vuelvo al inicio del programa
+  184                 
+  185                 ****************************************************************************************************************
+  186  0000                   rseg    VARS
+  187  0000           negop1  rmb     1
+  188  0001           op1     rmb     2
+  189  0003           oper    rmb     1
+  190  0004           negop2  rmb     1
+  191  0005           op2     rmb     2
+  192  0007           mdis    rmb     4
+  193  000B           digop   rmb     1
+  194  000C           result  rmb     2
+  195  000E           recur   rmb     1       ; 1=recursivo  0 = no recursivo
+  196  000F           NCLC    equ     *-negop1
+  197                 ****************************************************************************************************************        
+  198                 
+  199                 ****************************************************************************************************************
+  200  0000                   rseg    STACK
+  201  0000           stack   rmb     $50     ;el programa hace uso mínimo del stack, pero se asigno un espacio extra.
+  202  004F           st_ini  equ     *-1
+  203                 ****************************************************************************************************************
+  204                 
+  205                 ********************  String  ***************************
+  206  0000                   rseg    STRING
+  207  0000 00        I_STR   fcb      0
+  208  0001 01                fcb      1
+  209  0002 02                fcb      2
+  210  0003 03                fcb      3
+  211  0004 04                fcb      4
+  212  0005 05                fcb      5
+  213  0006 06                fcb      6
+  214  0007 07                fcb      7
+  215  0008 08                fcb      8
+  216  0009 09                fcb      9
+  217  000A 2B2D432F          fcc     '+-C/*R'
+       000E 2A52
+  218                         
+  219  0010                   END
+
+    Errors:  None           ########
+    Bytes:   345            # main #
+    CRC:     1408           ########
+
