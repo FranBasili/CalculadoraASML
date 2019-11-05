@@ -1,0 +1,139 @@
+	p68h11
+	public	initdis,outchar,init,display,error
+	extern	keypad,delay
+$const.def
+	rseg	CODE
+**************************************
+*Initdis: Inicializar el display
+**************************************
+initdis equ *
+	psha
+	ldaa	#$0F 	;set for output
+	staa	DDRC 	;C output
+	ldaa 	PIOC 	;get current value
+	anda 	#$FE 	;reset bit 0 to 0
+	staa 	PIOC 	;send it out
+	pula
+	rts
+
+**************************************
+*Outchar: 
+* ACCA: Carácter a enviar
+* ACCB: Posición (0-3)
+**************************************
+outchar equ *
+	stab	PORTCL 	;set the position
+	staa 	PORTB	;set the character
+	rts
+	
+********************************************************************************
+*INIT: 
+* Borra N cantidad de memorias desde la dirección pedida
+*	Parametros recibidos:
+*  Dirección de origen por IX
+*  Cant de memorias a borrar por AccA
+*	Parametros entregados: Ninguno
+********************************************************************************
+init 	equ *
+	pshx
+	psha		;programación defensiva
+	
+borra	clr	0,x	; Borro una memoria
+	inx		; Apunto IX a la sgte memoria
+	deca		; Decremento el contador
+	bne	borra	; Sigo borrando hasta que se borren todas las memorias
+	
+	pula		;programación defensiva
+	pulx
+	rts
+	
+*********************************************************************************
+*DISPLAY
+*  Carga el contenido de las posiciones de memoria mdis0, mdis1, mdis2, mdis3
+* y muesta su contenido en el display en la posicion 0, 1, 2, 3, respectivamente
+*	Parametros recibidos: 
+*  Inicio de string con caracteres a mostrar por IX
+*	Parametros entregados: El texto mostrado en el display
+*********************************************************************************
+
+display	equ	*
+
+	psha
+	pshb		;programación defensiva
+	
+	clrb		;limpia b para poder posicionarse en el primer elemento del display
+	ldaa	3,x	;carga el cuarto valor de la posición del string para ponerlo en 
+	jsr	outchar	 el primer elemento del display
+	incb
+	ldaa	2,x	;carga el tercer valor de la posición del string para ponerlo en 
+	jsr	outchar	 el segundo elemento del display
+	incb
+	ldaa	1,x	;carga el segundo valor de la posición del string para ponerlo en 
+	jsr	outchar	 el tercer elemento del display
+	incb
+	ldaa	0,x	;carga el primer valor de la posición del string para ponerlo en
+	jsr	outchar	 el cuarto elemento del display
+	
+	pulb		;programación defensiva
+	pula
+	rts
+
+**********************************************************************************************
+*ERROR
+* Pone una "E" en el display y "congela" la calculadora hasta que se aprete clear y se borren
+*todas las memorias.
+*Parametros recibidos:
+*	Primer dirección del arreglo numerico por IX
+*	Origen del arreglo del teclado por IY
+*	Cant memorias a borrar por AccB
+*	Memorias que se muestran en el display por stack
+*Parametros entregados: Ninguno
+**********************************************************************************************
+error	equ	*
+	psha		
+	pshb
+	pshx
+	pshy		; Programación defensiva
+	
+	tsx		; Creo un framepointer
+	ldx	8,x	; Cargo en IX la dir de mdis
+	ldaa	#$45	; Cargo "E" en la primer memoria del display
+	staa	0,x	
+	ldab	#3
+	inx
+erase	clr	0,x	; Borro los tres ultimos digitos del display
+	inx
+	decb
+	bne	erase
+	
+	tsx		; Creo un framepointer
+	ldx	8,x	; Cargo en IX la dir de  mdis
+	jsr	display	; Refresco el display
+	
+waitclr	tsx
+	ldy	0,x	; Si entre en error, lo mantengo en el bucle
+	jsr	keypad	;hasta que se aprete clear y se borren todas 
+	ldaa	0,y	;las memorias
+	cmpa	#$43
+	bne	waitclr
+	
+	tsx		; Creo un framepointer
+	ldaa	4,x	; Cargo en Acca la cant de memorias a borrar
+	ldx	2,x	; Cargo la dirección del inicio del arreglo numerico en IX
+	jsr	init	; Borro memorias
+	
+	ldaa	#$30	; Cargo "0" en Acca
+	tsx		; Creo un framepointer
+	ldx	8,x	; Cargo en IX la dir. de mdis
+	staa	3,x	; Guardo el "0" en el ult digito del display
+	
+	puly		; Programación defensiva
+	pulx
+	pulb
+	pula
+	rts		; Retorno a la subrutina sin haber modificado ningún registro no deseado
+	
+**********************************************************************************************
+**********************************************************************************************
+
+	END
