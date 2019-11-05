@@ -86,7 +86,7 @@ fin	puly		;programación defensiva
 **********************************************************************************************
 *MULTI
 * Teniendo ambos factores en registros y y recibiendo la dirección del primer factor, calcula
-*la multiplicación entre ellos, indicando error en caso de que sea necesario.
+*la multiplicación entre ambos operandos.
 *  Parametros recibidos: 
 *	Factor 1 por Accd
 *	Factor 2 por IX
@@ -153,7 +153,7 @@ failmul	puly
 
 **********************************************************************************************
 *DIVISION
-*Esta función recibe por indice D el numero signado a dividir y lo divide por el 
+*Esta función recibe por AccD el numero signado a dividir y lo divide por el 
 *numero que se encuentre en IX. El cociente se entrega en AccD 
 *Parametros recibidos: 
 *	Dividendo por AccD
