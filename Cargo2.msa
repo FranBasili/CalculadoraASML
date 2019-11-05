@@ -26,7 +26,7 @@ cargon	equ *
 	tsx			
 	ldx	10,x	; Apunto IX a la memoria que cuenta los digitos
 	ldaa	0,x	; Cargo el contador de digitos
-	cmpa 	#digitos    
+	cmpa 	#DIGITOS    
 	blo	cargo  ; Si ya tenía 4 digitos no sigo cargando
 	jmp	fcargon
 	
