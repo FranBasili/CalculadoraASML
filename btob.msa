@@ -1,5 +1,6 @@
 	p68h11
 	public	btasci
+$const.def
 ****************************************************************************************************************
 * 		Binary to ASCII
 * Transforma un numero en bcd a binario
