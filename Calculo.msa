@@ -6,8 +6,8 @@ $const.def
 *	Si se pulso F ('=') en el teclado llama a esta subrutina que se encarga de ver cuales son los operandos 
 *	y la operación y realizarla.
 * Parametros recibidos: 
-* Inicio de número Binary por IX 
-* Inicio de result por IY
+* 	Dirección del primer operando por IX 
+* 	Inicio de result por IY
 * Parametros entregados: Resultado de la opeación en la variable en la memoria definida como result
 ****************************************************************************************************************
 	rseg	CODE
@@ -65,57 +65,99 @@ suma	equ	*
 	
 ****************************************************************************************************************	
 mula	equ	*
-	pshy		;guardamos IX para no perder la dirección donde se guarda el resultado
-	ldd	#0
-	ldy	4,x	;cargamos el segundo operando y si es cero que cargue cero en el resulatdo
-	beq	fin
-	bmi	negab
-	
-mult	addd	0,x	;la primera vez se carga el número, las demas suma sucesivamente (Producto de números)
-	cpd	#MAX	;comparo con el máximo valor de 4 digitos
-	bpl	errcalm
-	cpd	#MIN	;comparo con el máximo valor de 3 digitos
-	bmi	errcalm
-	dey		;decrementamos el segundo operando para saber cuantas veces sumamos AccD
-	bne	mult
-	puly
-	std	0,y
-	clc		;indico que la cuenta esta bien
+	pshx		; Paso por stack la dirección del primer factor
+	ldd	0,x	; Cargo en AccD el primer factor
+	ldx	4,x	; Cargo en IX el segundo factor
+	jsr	multi
+	pulx
+	bcs	fin	; Si no hay error, no guardo el resultado.
+	std	0,y	;Guardo el resultado donde me indicaron
 	jmp	fin
 	
-negab	xgdy		;Intercambiamos para poder hacer el complemento a dos de IY
-	coma	
-	comb
-	addd	#1	;Complemento a dos de AccD
-	xgdy
-multn 	addd	0,x	;la primera vez se carga el número, las demas suma sucesivamente (Producto de números)
-	cpd	#MAX	;comparo con el máximo valor de 4 digitos
-	bpl	errcalm
-	cpd	#MIN	;comparo con el máximo valor de 3 digitos
-	bmi	errcalm
-	dey		;decrementamos el segundo operando para saber cuantas veces sumamos AccD
-	bne	multn		
-	coma	
-	comb
-	addd	#1	;Complemento a dos de AccD
-	puly
-	std	0,y
-	clc		;indico que la cuenta esta bien
-	jmp	fin
-	
-errcalm	puly
 errcal	sec		;indico por el carry (=1) que hay un error en la cuenta
 fin	puly		;programación defensiva
 	pulx
 	pula	
 	pulb
 	rts
+**********************************************************************************************
+**********************************************************************************************
+
+**********************************************************************************************
+*MULTI
+* Teniendo ambos factores en registros y y recibiendo la dirección del primer factor, calcula
+*la multiplicación entre ellos, indicando error en caso de que sea necesario.
+*  Parametros recibidos: 
+*	Factor 1 por Accd
+*	Factor 2 por IX
+*	Dirección primer factor por stack
+*  Parametros entregados: 
+*	Resultado en AccD
+**********************************************************************************************
+multi	equ	*
+	pshy
+	
+	clr	mulneg	; Limpio la variable que guarda la cant de factores negativos
+	tsy	
+	ldy	4,y	; Cargo IY como un contador con las veces a sumar el primer factor
+	
+	tsta		; Actualizamos el CCR en funcion del primer factor
+	bge	mulpos1	; Solo si no es negativo, saltamos directo al analisis del divisor
+	inc	mulneg	; Incremento el contador de numeros negativos
+	coma		; Comienzo realizando un complemento a 2 de forma semimanual, para ello:
+	comb		;complemento a 1 Acca y Accb por separado  
+	addd	#1	; Sumo uno a AccD
+	std	0,y	; Guardo el primer factor como positivo
+	
+mulpos1	xgdx		; Analizamos el segundo factor
+	tsta		; Actualizamos el CCR en funcion del primer factor
+	bge	mulpos2	; Solo si no es negativo, saltamos directo a la multiplicación
+	inc	mulneg	; Incremento el contador de numeros negativos
+	coma		; Comienzo realizando un complemento a 2 de forma semimanual, para ello:
+	comb		;complemento a 1 Acca y Accb por separado  
+	addd	#1	; Sumo uno a AccD
+	
+	
+mulpos2	xgdx		; Devuelvo el segundo factor a IX
+	ldd	#0	
+multn	addd	0,y	;la primera vez se carga el número, las demas suma sucesivamente (Producto de números)
+	cpd	#MAX	;comparo con el máximo valor de 4 digitos
+	bhs	errcalm	; Si es mayor, salto a error
+	dex		;decrementamos el segundo operando para saber cuantas veces sumamos AccD
+	bne	multn	;si el contador no es cero, sigo multiplicando	
+	
+	
+	tst	mulneg	
+	beq	finmul	; Si no había numeros negativos
+	lsr	mulneg	;o ambos eran negativos	no complementamos
+	lsr	mulneg	;el cociente obtenido.
+	bcs	finmul
+        
+	coma		; Una vez realizada la multiplicación hago el mismo proceso que hice al 
+	comb		;principio pero ahora para obtener resultado de forma signada.
+	addd	#1	; Sumo uno a AccD
+	cpd	#MIN	; Comparo con el valor mínimo
+	ble	errcalm	; Si el resultado es menor al mínimo, voy a error 
+	jmp	finmul
+
+errcalm	sec		; Aviso que hay error
+	jmp	failmul
+
+finmul	clc		; Aviso el exito de la multiplicación
+failmul	puly
+	rts		; Retorno a la subrutina sin haber modificado ningún registro no deseado
+	
+**********************************************************************************************
+**********************************************************************************************	
+
 
 **********************************************************************************************
 *DIVISION
 *Esta función recibe por indice D el numero signado a dividir y lo divide por el 
 *numero que se encuentre en IX. El cociente se entrega en AccD 
-*Parametros recibidos: dividendo en AccD, Divisor en IX.
+*Parametros recibidos: 
+*	Dividendo por AccD
+*	Divisor por IX.
 *Parametros entregados: cociente en AccD, resto por IX.
 **********************************************************************************************
 Division	equ	*
@@ -161,4 +203,6 @@ find	puly
 	
 **********************************************************************************************
 **********************************************************************************************	
+	rseg	VARS
+mulneg	rmb	1
 	END
