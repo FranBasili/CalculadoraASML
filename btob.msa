@@ -36,7 +36,7 @@ cargo	ldx	#10
 	cpx	#0
 	beq	nonum
 	addb	#$30	;corrección de número decimal a ASCII		
-nonum	stab	3,y	;lo cargo en mdis para luego ser mostrado en el display
+	stab	3,y	;lo cargo en mdis para luego ser mostrado en el display
 	dey		;recorro los elementos del display
 	xgdx		;intercambio para no perder lo que se seguira dividiendo
 	pulx	
@@ -44,6 +44,19 @@ nonum	stab	3,y	;lo cargo en mdis para luego ser mostrado en el display
 	pshx
 	bne	cargo	;si el contador es cero es porque cargo todos los elementos del display
 	pulx		;corrección de SP
+	jmp	fin
+**********************************************************************************************
+*	Para que no aparezcan ceros adelante de algun número
+*
+**********************************************************************************************
+nonum	pulx		;contador de divisiones (variable temporal)
+	addb	#$30	;corrección de número decimal a ASCII		
+	stab	3,y	;lo cargo en mdis para luego ser mostrado en el display
+cargo2	dey		;recorro los elementos del display
+	clrb		;borro el elemento del display
+	ldab 	3,y	
+	dex		;decremento el contador de divisiones (variable temporal)
+	bne	cargo2	;si el contador es cero es porque cargo todos los elementos del display
 	jmp	fin
 
 cero	std	0,y	;en las últimos tres elementos (de izquierda a derecha)no se ve nada y solo aparece 
