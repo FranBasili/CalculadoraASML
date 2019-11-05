@@ -33,10 +33,10 @@ posit	ldd	0,x
 	pshx		;uso una variable temporal que estará en el stack
 cargo	ldx	#10	
 	idiv
-	addd	#0	;verifico si el resto es cero
-	beq	dicero
+	cpx	#0
+	beq	nonum
 	addb	#$30	;corrección de número decimal a ASCII		
-dicero	stab	3,y	;lo cargo en mdis para luego ser mostrado en el display
+nonum	stab	3,y	;lo cargo en mdis para luego ser mostrado en el display
 	dey		;recorro los elementos del display
 	xgdx		;intercambio para no perder lo que se seguira dividiendo
 	pulx	
@@ -45,6 +45,7 @@ dicero	stab	3,y	;lo cargo en mdis para luego ser mostrado en el display
 	bne	cargo	;si el contador es cero es porque cargo todos los elementos del display
 	pulx		;corrección de SP
 	jmp	fin
+
 cero	std	0,y	;en las últimos tres elementos (de izquierda a derecha)no se ve nada y solo aparece 
 	ldd	#$0030	; un cero en la el primer elemento del display.
 	std	2,y	
