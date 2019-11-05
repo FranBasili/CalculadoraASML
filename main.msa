@@ -65,25 +65,25 @@ noR	ldaa	0,y
 	bne	cargon2	; Si hay operador, paso a cargar el operando 2
 	
 	ldaa	0,y
-	bne	nocero1
+	bne	nocero1	; Si no hay operador, verifico que no
 	ldx	op1	; se este apretando 0 y a su vez
 	beq	ceroizq	; el operando sea nulo.
-nocero1	ldx	#negop1	; y despues uso cargon para el operando 1
+nocero1	ldx	#negop1	; Si no sucede lo anterior, uso cargon para operando 1
 	jmp	saltoM1	
 	
 cargon2	ldaa	0,y
 	bne	nocero2
 	ldx	op2	; Si no hay operador, verifico que no
 	beq	ceroizq	;se este apretando 0 y a su vez el operando
-nocero2	ldx	#negop2	;sea nulo y despues uso cargon para el operando 2
+nocero2	ldx	#negop2	;Si no sucede lo anterior, uso cargon para operando 2
 
 saltoM1	jsr	cargon	;en operando 1
 	jmp	cierro
 	
-ceroizq	ldx	#mdis
+ceroizq	ldx	#mdis	
 	ldaa	#$30
-	staa	3,x
-	clr	0,x
+	staa	3,x	; En caso de no haber operando 2 y que se aprete el 0
+	clr	0,x	;Cargo un cero en el display y borro el operador.
 	
 cierro	pulx
 	pulx
