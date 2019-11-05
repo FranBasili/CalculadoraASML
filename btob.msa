@@ -28,13 +28,12 @@ btasci	equ	*
 	ldx	#3	;cantidad de numeros a convertir (como es negativo es uno menos)
 	pshx
 	bra 	cargo
-
 posit	ldd	0,x
 	ldx	#4	;cantidad de numeros a convertir
-	pshx		;uso una variable temporal que estara en el stack
+	pshx		;uso una variable temporal que estará en el stack
 cargo	ldx	#10	
 	idiv
-	addd	#0
+	addd	#0	;verifico si el resto es cero
 	beq	dicero
 	addb	#$30	;corrección de número decimal a ASCII		
 dicero	stab	3,y	;lo cargo en mdis para luego ser mostrado en el display
@@ -45,10 +44,12 @@ dicero	stab	3,y	;lo cargo en mdis para luego ser mostrado en el display
 	pshx
 	bne	cargo	;si el contador es cero es porque cargo todos los elementos del display
 	pulx		;corrección de SP
+	jmp	fin
 cero	std	0,y	;en las últimos tres elementos (de izquierda a derecha)no se ve nada y solo aparece 
 	ldd	#$0030	; un cero en la el primer elemento del display.
 	std	2,y	
-	puly		;programación defensiva
+	
+fin	puly		;programación defensiva
 	pulx
 	pula	
 	pulb
