@@ -1,5 +1,5 @@
 	p68h11
-	public	btasci
+	public	btasci,zcleaner
 $const.def
 ****************************************************************************************************************
 * 		Binary to ASCII
@@ -34,11 +34,10 @@ posit	ldd	0,x
 	pshx		;uso una variable temporal que estará en el stack
 cargo	ldx	#10	
 	idiv
+	cpx	#0
 	addb	#$30	;corrección de número decimal a ASCII		
 	stab	3,y	;lo cargo en mdis para luego ser mostrado en el display
-	cpx	#0
-	beq	nonum
-	dey		;recorro los elementos del display
+nonum	dey		;recorro los elementos del display
 	xgdx		;intercambio para no perder lo que se seguira dividiendo
 	pulx	
 	dex		;decremento el contador de divisiones (variable temporal)
@@ -46,17 +45,7 @@ cargo	ldx	#10
 	bne	cargo	;si el contador es cero es porque cargo todos los elementos del display
 	pulx		;corrección de SP
 	jmp	fin
-**********************************************************************************************
-*	Para que no aparezcan ceros adelante de algun número
-*
-**********************************************************************************************
-nonum	pulx		;contador de divisiones (variable temporal)
-cargo2	dey		;recorro los elementos del display
-	clrb		;borro el elemento del display
-	ldab 	3,y	
-	dex		;decremento el contador de divisiones (variable temporal)
-	bne	cargo2	;si el contador es cero es porque cargo todos los elementos del display
-	jmp	fin
+
 
 cero	std	0,y	;en las últimos tres elementos (de izquierda a derecha)no se ve nada y solo aparece 
 	ldd	#$0030	; un cero en la el primer elemento del display.
@@ -67,5 +56,39 @@ fin	puly		;programación defensiva
 	pula	
 	pulb
 	rts
+*************************************************************************************************************
+*************************************************************************************************************
 
+****************************************************************************************************************
+* ZCLEANER
+* Borra todos los ceros no significativos del display
+* Parametros recibidos:  
+*    Memorias correspondientes al display por IX.
+* Parametros entregados: Ninguno
+*************************************************************************************************************
+
+	rseg	CODE
+zcleaner	equ	*
+	psha
+	pshb
+	pshx
+	
+	ldab	#DIGITOS	; Cargo un contador con la cant de digitos a analizar
+cleaning	ldaa	0,x	; Cargo un dígito
+	cmpa	#$2D		; Si es el signo negativo, no lo borro pero no lo 
+	beq	noclean		;cuento como un digito significativo
+	tsta			; Si el caracter es distinto de cero: salgo de la subrutina
+	cmpa	#$30		; Si el caracter es 0, lo borro.
+	bne	fclean	
+	clr	0,x
+noclean	inx			; Apunto al sgte caracter
+	decb			; Decremento el contador de caracteres a analizar
+	bne	cleaning	; Sigo analizando mientras queden caracteres.
+	
+fclean	pulx
+	pulb
+	pula
+	rts
+*************************************************************************************************************
+*************************************************************************************************************
 	END

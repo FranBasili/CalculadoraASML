@@ -3,7 +3,7 @@
 *	Este programa ...
 ****************************************************************************************************************
 	p68h11		;declara el modelo de microprocesador utilizado.
-	extern	initdis,outchar,keypad,init,display,cargon,calculo,delay,cargoop,btasci,error
+	extern	initdis,outchar,keypad,init,display,cargon,calculo,delay,cargoop,btasci,error,zcleaner
 $const.def
 	rseg	CODE
 	lds 	#st_ini	; Inicializo el display
@@ -155,6 +155,7 @@ err	ldx	#mdis
 	pulx		; Compensamos el pasaje de variables por stack
 	
 lcarga	ldx	#mdis	
+	jsr	zcleaner ; Borro los ceros sin valor del display
 	jsr	display	; Refrezco el display
 	jsr	delay	; Ejecuto delay para antirebote
 nocarga	jmp	mloop 	; Vuelvo al inicio del programa
