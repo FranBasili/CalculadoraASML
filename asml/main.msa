@@ -102,9 +102,12 @@ noN 	ldaa	0,y
 	
 norecur	ldaa	oper	; Si no hay operador, cargo el 
 	beq	menop	; "-" como operador
-	
 	inc	negop2	; Si no se cumplio nada de lo anterior,
-	ldaa	#$2D	;avisamos que el operando 2 es negativo
+	ldd	op2
+	beq	salto99
+	jmp	nocarga
+	
+salto99	ldaa	#$2D	;avisamos que el operando 2 es negativo
 	staa	mdis	;y cargamos el "-" en el display
 	inc	digop	; Decrementamos en uno los digitos disponibles
 	jmp	lcarga
