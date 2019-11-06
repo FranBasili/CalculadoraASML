@@ -1,0 +1,162 @@
+################################################################################
+#                                                                              #
+#      Micro Series Universal Linker V4.46C/DXT        06/Nov/119  19:19:47     #
+#                                                                              #
+#           Target CPU    =  68hc11                                            #
+#           List file     =  linkout.lst                                       #
+#           Output file 1 =  aout.a07                                          #
+#           Output format =  motorola                                          #
+#           Command line  =  -f li11 (-ZCODE=2000 -ZSTACK=4000 -ZVARS=4100     #
+#                            -ZSTRING=4180 -c68hc11 -Fmotorola -x -B) -A main  #
+#                            subrut1 colrow btob calculo cargo2 delay -l       #
+#                            linkout.lst                                       #
+#                                                                              #
+#                                               (c) Copyright IAR Systems 1993 #
+################################################################################
+
+
+
+
+
+                ****************************************
+                *                                      *
+                *           CROSS REFERENCE            *
+                *                                      *
+                ****************************************
+
+                  There are no program entries.
+
+
+                ****************************************
+                *                                      *
+                *             MODULE MAP               *
+                *                                      *
+                ****************************************
+
+  FILE NAME : main.r07
+  PROGRAM MODULE, NAME : main
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address : 2000 - 2158
+    -------------------------------------------------------------------------
+VARS
+  Relative segment, address : 4100 - 410E
+    -------------------------------------------------------------------------
+STACK
+  Relative segment, address : 4000 - 404F
+    -------------------------------------------------------------------------
+STRING
+  Relative segment, address : 4180 - 418F
+
+    *************************************************************************
+
+  FILE NAME : subrut1.r07
+  PROGRAM MODULE, NAME : subrut1
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address : 2159 - 21D5
+           ENTRIES                ADDRESS          REF BY MODULE
+           initdis                 2159            main
+           outchar                 2169            main
+                                                   colrow
+           init                    2170            main
+           display                 217B            main
+           error                   2198            main
+
+    *************************************************************************
+
+  FILE NAME : colrow.r07
+  PROGRAM MODULE, NAME : colrow
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address : 21D6 - 2237
+           ENTRIES                ADDRESS          REF BY MODULE
+           keypad                  21D6            main
+                                                   subrut1
+
+    *************************************************************************
+
+  FILE NAME : btob.r07
+  PROGRAM MODULE, NAME : btob
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address : 2238 - 229C
+           ENTRIES                ADDRESS          REF BY MODULE
+           btasci                  2238            main
+                                                   cargo2
+           zcleaner                2283            main
+
+    *************************************************************************
+
+  FILE NAME : calculo.r07
+  PROGRAM MODULE, NAME : calculo
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address : 229D - 23A6
+           ENTRIES                ADDRESS          REF BY MODULE
+           calculo                 229D            main
+    -------------------------------------------------------------------------
+VARS
+  Relative segment, address : 410F - 410F
+
+    *************************************************************************
+
+  FILE NAME : cargo2.r07
+  PROGRAM MODULE, NAME : cargo2
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address : 23A7 - 2430
+           ENTRIES                ADDRESS          REF BY MODULE
+           cargon                  23A7            main
+           cargoop                 2413            main
+    -------------------------------------------------------------------------
+VARS
+  Relative segment, address : 4110 - 4112
+
+    *************************************************************************
+
+  FILE NAME : delay.r07
+  PROGRAM MODULE, NAME : delay
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address : 2431 - 2440
+           ENTRIES                ADDRESS          REF BY MODULE
+           delay                   2431            main
+                                                   subrut1
+
+                ****************************************
+                *                                      *
+                *        SEGMENTS IN DUMP ORDER        *
+                *                                      *
+                ****************************************
+
+ SEGMENT               START ADDRESS    END ADDRESS  TYPE  ORG  P/N  ALIGN
+ =======               =============    ===========  ====  ===  ===  =====
+CODE                        2000     -     2440       rel  stc  pos   0     
+STACK                       4000     -     404F       rel  stc  pos   0     
+VARS                        4100     -     4112       rel  stc  pos   0     
+STRING                      4180     -     418F       rel  stc  pos   0     
+
+                ****************************************
+                *                                      *
+                *        END OF CROSS REFERENCE        *
+                *                                      *
+                ****************************************
+
+Errors: none
+Warnings: none
+

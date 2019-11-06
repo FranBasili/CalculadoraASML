@@ -1,6 +1,6 @@
 ################################################################################
 #                                                                              #
-#    Micro Series 6801 Assembler V2.00/DOS              03/Nov/19  26:09:39    #
+#    Micro Series 6801 Assembler V2.00/DOS              06/Nov/19  16:46:57    #
 #                                                                              #
 #       Source   =   subrut1.msa                                               #
 #       List     =   subrut1.lst                                               #
@@ -33,9 +33,9 @@
    20  0007           FIL3    equ     00000111b
    21                 **********************************************************
    22                 *************Caracteristicas de Hardware******************
-   23  0004           digitos equ     4
-   24  2710           MAX     equ     10000
-   25  FC18           MIN     equ     -1000
+   23  0004           DIGITOS equ     4
+   24  270F           MAX     equ     9999
+   25  FC19           MIN     equ     -999
    26                 **********************************************************
    27  0000                   rseg    CODE
    28                 **************************************
@@ -131,7 +131,7 @@
   118  0042 183C              pshy            ; Programación defensiva
   119                         
   120  0044 30                tsx             ; Creo un framepointer
-  121  0045 EE08              ldx     8,x     ; Cargo en IX la dir de  mdis
+  121  0045 EE08              ldx     8,x     ; Cargo en IX la dir de mdis
   122  0047 8645              ldaa    #$45    ; Cargo "E" en la primer memoria del display
   123  0049 A700              staa    0,x     
   124  004B C603              ldab    #3
@@ -175,5 +175,5 @@
 
     Errors:  None         ###########
     Bytes:   125          # subrut1 #
-    CRC:     7B35         ###########
+    CRC:     EFBF         ###########
 

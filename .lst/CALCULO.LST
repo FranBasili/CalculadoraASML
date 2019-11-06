@@ -1,6 +1,6 @@
 ################################################################################
 #                                                                              #
-#    Micro Series 6801 Assembler V2.00/DOS              05/Nov/19  24:02:10    #
+#    Micro Series 6801 Assembler V2.00/DOS              06/Nov/19  16:46:45    #
 #                                                                              #
 #       Source   =   calculo.msa                                               #
 #       List     =   calculo.lst                                               #
@@ -254,5 +254,5 @@
 
     Errors:  None         ###########
     Bytes:   266          # calculo #
-    CRC:     E05F         ###########
+    CRC:     20A6         ###########
 

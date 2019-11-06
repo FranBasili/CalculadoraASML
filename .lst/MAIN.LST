@@ -1,6 +1,6 @@
 ################################################################################
 #                                                                              #
-#    Micro Series 6801 Assembler V2.00/DOS              05/Nov/19  24:05:16    #
+#    Micro Series 6801 Assembler V2.00/DOS              06/Nov/19  19:13:08    #
 #                                                                              #
 #       Source   =   main.msa                                                  #
 #       List     =   main.lst                                                  #
@@ -46,7 +46,7 @@
    33  0006 CE0000            ldx     #negop1
    34  0009 860F              ldaa    #NCLC   
    35  000B BD0000            jsr     init    ; Reseteo las memorias
-   36  000E 8630              ldaa    #$30
+   36  000E 8630              ldaa    #'0'
    37  0010 CE0007            ldx     #mdis
    38  0013 A703              staa    3,x
    39  0015 BD0000            jsr     display ; Refrezco el display
@@ -57,7 +57,7 @@
    44  0021 7E0156            jmp     nocarga ; Si no se apretó nada, sigo analizando hasta que se aprete algo
    45                         
    46  0024 18A600    apreto  ldaa    0,y
-   47  0027 8143              cmpa    #$43    ; Analizo si se apretó el clear
+   47  0027 8143              cmpa    #'C'    ; Analizo si se apretó el clear
    48  0029 2612              bne     noC     ; Si no se apretó clear, sigo analizando que se apreto  
    49  002B CE0000            ldx     #negop1 ; Si se apretó clear, borro todas las memorias y muestro
    50  002E 860F              ldaa    #NCLC   ; "0" en el display
@@ -68,7 +68,7 @@
    55  003A 7E014A            jmp     lcarga  ; Una vez terminado, vuelvo a esperar que presionen algo.
    56                         
    57  003D 18A600    noC     ldaa    0,y
-   58  0040 8152              cmpa    #$52    ; Analizo si se apretó "R"
+   58  0040 8152              cmpa    #'R'    ; Analizo si se apretó "R"
    59  0042 262F              bne     noR
    60  0044 B60003            ldaa    oper    ; Si no hay operador, ignoro que se haya apretado "R"
    61  0047 2603              bne     sigo
@@ -120,7 +120,7 @@
   107  00AF 7E00BB            jmp     cierro
   108                         
   109  00B2 CE0007    ceroizq ldx     #mdis   
-  110  00B5 8630              ldaa    #$30
+  110  00B5 8630              ldaa    #'0'
   111  00B7 A703              staa    3,x     ; En caso de no haber operando 2 y que se aprete el 0
   112  00B9 6F00              clr     0,x     ;Cargo un cero en el display y borro el operador.
   113                         
@@ -130,7 +130,7 @@
   117                 
   118                 
   119  00C0 18A600    noN     ldaa    0,y
-  120  00C3 812D              cmpa    #$2D    
+  120  00C3 812D              cmpa    #'-'    
   121  00C5 263B              bne     noM     ; Se apretó "-"?
   122                         
   123  00C7 FE0001            ldx     op1     ; Si todavía no hay operando 1
@@ -146,7 +146,7 @@
   133  00DF 2703              beq     salto99
   134  00E1 7E0156            jmp     nocarga
   135                         
-  136  00E4 862D      salto99 ldaa    #$2D    ;avisamos que el operando 2 es negativo
+  136  00E4 862D      salto99 ldaa    #'-'    ;avisamos que el operando 2 es negativo
   137  00E6 B70007            staa    mdis    ;y cargamos el "-" en el display
   138  00E9 7C000B            inc     digop   ; Decrementamos en uno los digitos disponibles
   139  00EC 7E014A            jmp     lcarga
@@ -157,7 +157,7 @@
   144  00F2 260E              bne     noM     ;uso el '-' como operador aunque op1 sea 0
   145  00F4 7C0000            inc     negop1  ; Avisamos que el operando 1 es negativo
   146  00F7 7C000B            inc     digop   ; Decrementamos en uno los digitos disponibles
-  147  00FA 862D              ldaa    #$2D    ;y cargamos el "-" en el display
+  147  00FA 862D              ldaa    #'-'    ;y cargamos el "-" en el display
   148  00FC B70007            staa    mdis
   149  00FF 7E014A            jmp     lcarga
   150                 
@@ -241,5 +241,5 @@
 
     Errors:  None           ########
     Bytes:   361            # main #
-    CRC:     8B9F           ########
+    CRC:     A43D           ########
 

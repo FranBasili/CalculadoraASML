@@ -1,6 +1,6 @@
 ################################################################################
 #                                                                              #
-#    Micro Series 6801 Assembler V2.00/DOS              03/Nov/19  26:09:43    #
+#    Micro Series 6801 Assembler V2.00/DOS              06/Nov/19  16:46:51    #
 #                                                                              #
 #       Source   =   delay.msa                                                 #
 #       List     =   delay.lst                                                 #
@@ -39,5 +39,5 @@
 
     Errors:  None          #########
     Bytes:   16            # delay #
-    CRC:     F3E3          #########
+    CRC:     A3DA          #########
 
