@@ -44,9 +44,9 @@ resta	equ	*
 	ldd	0,x
 	subd	4,x	;4,x es el segundo operando en variables
 	cpd	#MIN	;comparo con el máximo valor de 3 digitos
-	bmi	errcal
+	blt	errcal
 	cpd	#MAX	;comparo con el máximo valor de 4 digitos
-	bpl	errcal
+	bgt	errcal
 	std	0,y
 	clc		;indico que la cuenta esta bien
 	jmp	fin
@@ -56,9 +56,9 @@ suma	equ	*
 	ldd	0,x
 	addd	4,x	;4,x es el segundo operando en variables
 	cpd	#MAX	;comparo con el máximo valor de 4 digitos
-	bpl	errcal
+	bgt	errcal
 	cpd	#MIN	;comparo con el máximo valor de 3 digitos
-	bmi	errcal
+	blt	errcal
 	std	0,y
 	clc		;indico que la cuenta esta bien
 	jmp	fin
@@ -67,11 +67,20 @@ suma	equ	*
 mula	equ	*
 	pshx		; Paso por stack la dirección del primer factor
 	ldd	0,x	; Cargo en AccD el primer factor
+	beq	zporz	; Si alguno de los factores es 0, voy a zporz
+	
 	ldx	4,x	; Cargo en IX el segundo factor
+	beq	zporz	; Si alguno de los factores es 0, voy a zporz
+	
 	jsr	multi
 	pulx
 	bcs	fin	; Si no hay error, no guardo el resultado.
 	std	0,y	;Guardo el resultado donde me indicaron
+	jmp	fin
+
+zporz	clr	0,y	; Si alguno de los factores es 0,
+	clr	1,y	;hago que el resultado sea 0 sin necesidad
+	pulx		;de saltar a la sbr de multiplicación
 	jmp	fin
 	
 errcal	sec		;indico por el carry (=1) que hay un error en la cuenta
@@ -119,7 +128,7 @@ mulpos1	xgdx		; Analizamos el segundo factor
 	
 	
 mulpos2	xgdx		; Devuelvo el segundo factor a IX
-	ldd	#0	
+	ldd	#0
 multn	addd	0,y	;la primera vez se carga el número, las demas suma sucesivamente (Producto de números)
 	cpd	#MAX	;comparo con el máximo valor de 4 digitos
 	bhs	errcalm	; Si es mayor, salto a error
@@ -139,6 +148,7 @@ multn	addd	0,y	;la primera vez se carga el número, las demas suma sucesivamente
 	cpd	#MIN	; Comparo con el valor mínimo
 	ble	errcalm	; Si el resultado es menor al mínimo, voy a error 
 	jmp	finmul
+	
 
 errcalm	sec		; Aviso que hay error
 	jmp	failmul

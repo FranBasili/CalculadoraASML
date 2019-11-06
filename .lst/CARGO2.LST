@@ -1,6 +1,6 @@
 ################################################################################
 #                                                                              #
-#    Micro Series 6801 Assembler V2.00/DOS              03/Nov/19  26:09:29    #
+#    Micro Series 6801 Assembler V2.00/DOS              05/Nov/19  23:41:10    #
 #                                                                              #
 #       Source   =   cargo2.msa                                                #
 #       List     =   cargo2.lst                                                #
@@ -34,9 +34,9 @@
    21  0007           FIL3    equ     00000111b
    22                 **********************************************************
    23                 *************Caracteristicas de Hardware******************
-   24  0004           digitos equ     4
-   25  2710           MAX     equ     10000
-   26  FC18           MIN     equ     -1000
+   24  0004           DIGITOS equ     4
+   25  270F           MAX     equ     9999
+   26  FC19           MIN     equ     -999
    27                 **********************************************************
    28                 ****************************************************************************************************************
    29                 * CARGON
@@ -61,7 +61,7 @@
    48  0008 30                tsx                     
    49  0009 EE0A              ldx     10,x    ; Apunto IX a la memoria que cuenta los digitos
    50  000B A600              ldaa    0,x     ; Cargo el contador de digitos
-   51  000D 8104              cmpa    #digitos    
+   51  000D 8104              cmpa    #DIGITOS    
    52  000F 2503              blo     cargo  ; Si ya tenía 4 digitos no sigo cargando
    53  0011 7E0066            jmp     fcargon
    54                         
@@ -130,8 +130,8 @@
   117                 *       Carga el operador en la memoria correspondiente y en el display.        
   118                 * Parametros recibidos: 
   119                 *   Por IX: Direccion de la memoria donde guardo el contador de digitos.
-  120                 *   Por IY: Direccion de la memoria donde guardo el operador. 
-  121                 *   Por Acca: Operador a cargar
+  120                 *   Por IY: Direccion de la memoria donde guardo el operando. 
+  121                 *   Por Acca: Operando a cargar
   122                 *   Por Stack: Dirección de las memorias del display.
   123                 *   
   124                 * Parametros entregados: El operando en la memoria correspondiente
@@ -174,5 +174,5 @@
 
     Errors:  None          ##########
     Bytes:   138           # cargo2 #
-    CRC:     1F4F          ##########
+    CRC:     C41C          ##########
 

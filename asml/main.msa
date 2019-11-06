@@ -57,7 +57,11 @@ noerror	ldx	result	; Si no hay error:
 noR	ldaa	0,y
 	cmpa	#10
 	bhs	noN	; Verifico si se apretó un numero
-	ldx	#digop	
+	ldaa	recur
+	beq	norecurn
+	jmp	nocarga
+	
+norecurn	ldx	#digop	
 	pshx
 	ldx	#mdis
 	pshx
