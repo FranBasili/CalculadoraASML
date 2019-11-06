@@ -11,7 +11,7 @@ $const.def
 	ldx	#negop1
 	ldaa	#NCLC	
 	jsr	init	; Reseteo las memorias
-	ldaa	#$30
+	ldaa	#'0'
 	ldx	#mdis
 	staa	3,x
 	jsr 	display	; Refrezco el display
@@ -22,18 +22,18 @@ mloop	ldy	#I_STR
 	jmp	nocarga	; Si no se apretó nada, sigo analizando hasta que se aprete algo
 	
 apreto	ldaa	0,y
-	cmpa	#$43	; Analizo si se apretó el clear
+	cmpa	#'C'	; Analizo si se apretó el clear
 	bne	noC	; Si no se apretó clear, sigo analizando que se apreto  
 	ldx	#negop1	; Si se apretó clear, borro todas las memorias y muestro
 	ldaa	#NCLC	; "0" en el display
 	jsr	init
-	ldaa	#$30
+	ldaa	#'0'
 	ldx	#mdis
 	staa	3,x
 	jmp	lcarga	; Una vez terminado, vuelvo a esperar que presionen algo.
 	
 noC	ldaa	0,y
-	cmpa	#$52	; Analizo si se apretó "R"
+	cmpa	#'R'	; Analizo si se apretó "R"
 	bne	noR
 	ldaa	oper	; Si no hay operador, ignoro que se haya apretado "R"
 	bne	sigo
@@ -85,7 +85,7 @@ saltoM1	jsr	cargon	;en operando 1
 	jmp	cierro
 	
 ceroizq	ldx	#mdis	
-	ldaa	#$30
+	ldaa	#'0'
 	staa	3,x	; En caso de no haber operando 2 y que se aprete el 0
 	clr	0,x	;Cargo un cero en el display y borro el operador.
 	
@@ -95,7 +95,7 @@ cierro	pulx
 
 
 noN 	ldaa	0,y
-	cmpa	#$2D	
+	cmpa	#'-'	
 	bne	noM	; Se apretó "-"?
 	
 	ldx	op1	; Si todavía no hay operando 1
@@ -111,7 +111,7 @@ norecur	ldaa	oper	; Si no hay operador, cargo el
 	beq	salto99
 	jmp	nocarga
 	
-salto99	ldaa	#$2D	;avisamos que el operando 2 es negativo
+salto99	ldaa	#'-'	;avisamos que el operando 2 es negativo
 	staa	mdis	;y cargamos el "-" en el display
 	inc	digop	; Decrementamos en uno los digitos disponibles
 	jmp	lcarga
@@ -122,7 +122,7 @@ nega	ldaa	negop1	; Si ya fue negado el operando 1,
 	bne	noM	;uso el '-' como operador aunque op1 sea 0
 	inc	negop1	; Avisamos que el operando 1 es negativo
 	inc	digop	; Decrementamos en uno los digitos disponibles
-	ldaa	#$2D	;y cargamos el "-" en el display
+	ldaa	#'-'	;y cargamos el "-" en el display
 	staa	mdis
 	jmp	lcarga
 

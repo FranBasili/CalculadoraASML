@@ -16,7 +16,9 @@ FIL2 	equ 	00001011b
 FIL3 	equ 	00000111b
 **********************************************************
 *************Caracteristicas de Hardware******************
-DIGITOS	equ	4
-MAX	equ	9999
-MIN	equ	-999
+DIGITOS	equ	4	;cantidad de elementos del display
+MAX	equ	9999	;máximo valor de I/O
+MIN	equ	-999	;mínimo valor de I/O
+CDC8	equ	$30	;constante de corrección para ASCII
+ZDIS	equ	$0030	;cero para el display de 4 elementos
 **********************************************************

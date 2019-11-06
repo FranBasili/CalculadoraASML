@@ -20,7 +20,7 @@ btasci	equ	*
 	beq	cero
 	lsla
 	bcc	posit	;en estas cuatro primeras lineas verifico si el númmero es negativo o cero
-	ldab	#$2D	;cargo el sibolo negativo -
+	ldab	#'-'	;cargo el sibolo negativo -
 	stab	0,y
 	ldd	0,x	;cargo el numero a convertir
 	coma	
@@ -35,7 +35,7 @@ posit	ldd	0,x
 cargo	ldx	#10	
 	idiv
 	cpx	#0
-	addb	#$30	;corrección de número decimal a ASCII		
+	addb	#CDC8	;corrección de número decimal a ASCII		
 	stab	3,y	;lo cargo en mdis para luego ser mostrado en el display
 nonum	dey		;recorro los elementos del display
 	xgdx		;intercambio para no perder lo que se seguira dividiendo
@@ -48,7 +48,7 @@ nonum	dey		;recorro los elementos del display
 
 
 cero	std	0,y	;en las últimos tres elementos (de izquierda a derecha)no se ve nada y solo aparece 
-	ldd	#$0030	; un cero en la el primer elemento del display.
+	ldd	#ZDIS	; un cero en la el primer elemento del display.
 	std	2,y	
 	
 fin	puly		;programación defensiva
@@ -75,10 +75,10 @@ zcleaner	equ	*
 	
 	ldab	#DIGITOS	; Cargo un contador con la cant de digitos a analizar
 cleaning	ldaa	0,x	; Cargo un dígito
-	cmpa	#$2D		; Si es el signo negativo, no lo borro pero no lo 
+	cmpa	#'-'		; Si es el signo negativo, no lo borro pero no lo 
 	beq	noclean		;cuento como un digito significativo
 	tsta			; Si el caracter es distinto de cero: salgo de la subrutina
-	cmpa	#$30		; Si el caracter es 0, lo borro.
+	cmpa	#'0'		; Si el caracter es 0, lo borro.
 	bne	fclean	
 	clr	0,x
 noclean	inx			; Apunto al sgte caracter
